@@ -2,6 +2,11 @@
 
 All notable changes to the starter. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/) (major: a file moves, is renamed or changes its contract with SETUP.md; minor: new files or sections; patch: fixes and wording).
 
+## [1.1.0] - 2026-10-30
+
+### Added
+- [React Doctor](https://www.npmjs.com/package/react-doctor) for React code health: `react-doctor` devDependency and a `pnpm doctor` script in `SETUP.md`, a CI step, the verify step, `CLAUDE.md` commands, `TESTING.md` §4, and the developer, code-reviewer and devops agents (changed files only with `--scope changed --base main`).
+
 ## [1.0.0] - 2026-10-27
 
 First public release.
