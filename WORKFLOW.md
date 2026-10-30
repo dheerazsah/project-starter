@@ -20,6 +20,7 @@ How work moves through the team of Claude Code agents (`.claude/agents/`), what 
 | --- | --- | --- |
 | `project-manager` | Turns requests into ordered tasks with owners; keeps `GUIDE.md` and `ROADMAP.md` current; branch names and PR text | Docs only |
 | `credits-optimizer` | Before a task: which agent and model, a tight brief, the checks. After: where credits were wasted | No |
+| `skills-scout` | Runs on Haiku: reads large skills and references (Vercel agent-skills) and returns only the rules a task needs; first-pass checklist scans | No |
 | `product-designer` | Brief, user flow, scope, then screens; owns `DESIGN_SYSTEM.md`; WCAG 2.2 AA and the UX laws | Visual changes |
 | `developer` | Front end in `src/` | Yes |
 | `backend-developer` | Worker API, D1, R2, sign-in, AI calls in `worker/`, `migrations/`, `shared/` | Yes |
@@ -92,7 +93,7 @@ A good brief makes the agent right the first time (rework is the biggest waste):
 - What **not** to touch (other agents' areas, uncommitted work, `src/components/ui/`).
 - Design notes from `product-designer` for UI work.
 - The checks to run and what to report (file paths, results, anything left or risky).
-- Model: the strongest for building, design, security, migrations, debugging; mid-size only for mechanical work (QA checklists, doc edits); see `credits-optimizer`.
+- Model: the strongest for building, design, security, migrations, debugging; mid-size only for mechanical work (QA checklists, doc edits); `skills-scout` (Haiku) for skill and reference lookups; see `credits-optimizer` and §8.
 
 ## 7. Handoff after a context reset
 
@@ -112,6 +113,28 @@ Before stopping work, leave the roadmap current: what's done, what's half done (
 - Waste to cut: rework from unclear briefs, re-reading whole trees, repeated full test runs (focused while working, full once at the end), oversized briefs, parallel edits that collide, screenshots.
 - **Never PNG.** Text checks first (DOM text, roles, computed styles, overflow, axe, console). Screenshots only when text can't tell or the owner needs to see it (PR screenshots), as JPEG quality 60 with CSS scale, a few per task.
 - No demo artifacts or long reports unless the owner asks.
+
+### External agent skills (Vercel agent-skills)
+
+[github.com/vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) (MIT) packages Vercel Engineering's guidance as Agent Skills that Claude Code loads when a task matches. Useful, but **heavy**: some skills are large, and loading one on the strongest model in every task burns credits fast. Rough sizes (about 4 characters per token):
+
+| Skill | For this stack | Size when loaded |
+| --- | --- | --- |
+| `web-design-guidelines` | Yes: a UI audit (accessibility, focus, forms, motion, typography, images, performance, dark mode). Our `DESIGN_SYSTEM.md` wins on conflicts. It fetches its rules live from GitHub on every run. | Small skill, but fetches about 2k tokens of rules and then reads every file it audits |
+| `react-best-practices` | Partly: bundle size, client data fetching, re-renders and rendering rules apply; the Next.js server rules don't | About 27k tokens (`AGENTS.md`), plus its `rules/` folder |
+| `composition-patterns` | Yes: compound components, lifting state, fewer boolean props | About 6k tokens (`AGENTS.md`) |
+| `react-view-transitions` | Partly: check `<ViewTransition>` is in our React version; skip the Next.js parts | About 4k tokens, plus references |
+| `writing-guidelines` | Optional, for docs; our copy rules (`DESIGN_SYSTEM.md` §20) win | Small skill plus fetched rules |
+| `react-native-guidelines` | No (web stack), unless the project adds an Expo app | |
+| `deploy-to-vercel`, `vercel-optimize` | **Don't install.** We deploy to Cloudflare, and the owner approves every deploy; `deploy-to-vercel` could fire on "deploy my app" and ship to the wrong host. | |
+
+- **Install only the skills you need, one by one (owner OK first):** `npx skills add vercel-labs/agent-skills --skill web-design-guidelines -a claude-code`. Never install the whole pack.
+- **Look up with the cheap agent.** Large skills are read by `skills-scout`, which runs on Haiku. It returns only the rules that apply to the task (under 40 lines with sources), and the building or reviewing agent works from that excerpt. A first-pass audit (for example the web interface guidelines over changed files) can also run on `skills-scout`; `ux-reviewer` or `code-reviewer` confirms findings before anything changes.
+- **Credit warning on expensive models.** Before an agent running on the strongest (most expensive) model loads a skill or reference over about 20 KB (about 5k tokens), or runs a skill-based audit over more than about 10 files, it stops and shows this, then waits for the owner. When nobody is there to answer, it hands the lookup to `skills-scout` instead:
+
+  > **Credit warning:** `<skill>` loads about `<N>`k tokens, and this agent runs on `<model>`, an expensive model. Cheaper: let `skills-scout` (Haiku) pull only the rules this task needs. Continue on `<model>` anyway? (yes / use skills-scout)
+
+- This is the one place where the cheap model is the default. Building, design, security and final review still run on the strongest model, working from the scout's excerpt.
 
 ## 9. Seed and demo data
 

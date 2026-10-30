@@ -26,6 +26,7 @@ Needs Node 22+, pnpm 10+, and a Cloudflare account for the first deploy.
 | [`ROADMAP.md`](./ROADMAP.md) | `docs/ROADMAP.md` | The plan and the only status source |
 | [`WORKFLOW.md`](./WORKFLOW.md) | `docs/WORKFLOW.md` | How the agents work together, owner approvals, lessons |
 | [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md) | `docs/DESIGN_SYSTEM.md` | UI principles, UX laws, tokens, components, accessibility, copy, review checklist |
+| [`DESIGN_INSPIRATION.md`](./DESIGN_INSPIRATION.md) | `docs/DESIGN_INSPIRATION.md` | Design inspiration and toolkit: expressive effects (React Three Fiber, Liquid Glass JS, Shader Gradient, Liquid Logo / Paper Shaders), UI building blocks (Motion, Bklit UI, Kokonut UI) outside tools (Manus), scroll and animation libraries (Lenis, GSAP, Vanta, React Bits), premium interaction patterns and visual reference archives |
 | [`RESEARCH.md`](./RESEARCH.md) | `docs/RESEARCH.md` | Competitor and UX research template |
 | [`BACKEND_CLOUDFLARE.md`](./BACKEND_CLOUDFLARE.md) | `docs/BACKEND_CLOUDFLARE.md` | Worker, D1 and migrations, R2, KV, Durable Objects, AI, cron, `wrangler.jsonc` |
 | [`ENV_AND_SECRETS.md`](./ENV_AND_SECRETS.md) | `docs/ENV_AND_SECRETS.md` | Every var and secret per environment; demo vs production |
@@ -34,7 +35,16 @@ Needs Node 22+, pnpm 10+, and a Cloudflare account for the first deploy.
 | [`TESTING.md`](./TESTING.md) | `docs/TESTING.md` | Worker tests on in-memory D1, migration tests, browser QA, axe |
 | [`DEPLOY_AND_CI.md`](./DEPLOY_AND_CI.md) | `docs/DEPLOY_AND_CI.md` | CI, environments, first deploy, backups, rollback, monitoring |
 | [`BROWSER_EXTENSION.md`](./BROWSER_EXTENSION.md) | `docs/BROWSER_EXTENSION.md` | Optional: an MV3 extension that talks to the Worker |
-| `agent-*.md` (9 files) | `.claude/agents/<name>.md` | project-manager, credits-optimizer, product-designer, developer, backend-developer, ux-reviewer, code-reviewer, qa-tester, devops |
+| [`CLAUDE_PLUGINS.md`](./CLAUDE_PLUGINS.md) | `docs/CLAUDE_PLUGINS.md` | Which community Claude plugin to install for each kind of work, one pick per job, with licences and what each runs |
+| [`SEO_AND_DISCOVERABILITY.md`](./SEO_AND_DISCOVERABILITY.md) | `docs/SEO_AND_DISCOVERABILITY.md` | Launch guide for being found on Google, Bing and AI answer engines (Search Console, sitemap, meta tags, SEO and GEO, Google Business Profile), with the Worker setup for public pages |
+| [`PRE_LAUNCH_COMPLIANCE_CHECKLIST.md`](./PRE_LAUNCH_COMPLIANCE_CHECKLIST.md) | `docs/PRE_LAUNCH_COMPLIANCE_CHECKLIST.md` | Pre-release compliance gate (privacy, terms, cookies, consents, deletion, dark patterns, accessibility, licences); used only at the end of production, portable to any project |
+| `agent-*.md` (10 files) | `.claude/agents/<name>.md` | project-manager, credits-optimizer, skills-scout, product-designer, developer, backend-developer, ux-reviewer, code-reviewer, qa-tester, devops |
+
+## Find what you need
+
+Every doc has one job (table above). To go from a goal to the right doc, agent, skill or plugin ("design a screen", "add AI features", "get found on Google", "tokens keep running out"), use the **"Where to look for each objective"** table in [`CLAUDE.md`](./CLAUDE.md#where-to-look-for-each-objective). It also gives the order for finding skills: what's already there first, then single Vercel skills read through `skills-scout`, then one community plugin from [`CLAUDE_PLUGINS.md`](./CLAUDE_PLUGINS.md), always with the owner's OK.
+
+Two docs wait for a specific moment: [`SEO_AND_DISCOVERABILITY.md`](./SEO_AND_DISCOVERABILITY.md) at launch (plus two early decisions) and [`PRE_LAUNCH_COMPLIANCE_CHECKLIST.md`](./PRE_LAUNCH_COMPLIANCE_CHECKLIST.md) at the end of production.
 
 ## How the team works
 
