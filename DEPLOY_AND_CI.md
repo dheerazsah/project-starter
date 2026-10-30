@@ -16,7 +16,7 @@ CI on every PR, the environments, the first deploy, remote migrations with backu
 
 ## 1. CI with GitHub Actions
 
-`.github/workflows/ci.yml` runs on every PR and on pushes to `main`: install with the lockfile, typecheck, lint, test (Worker tests in workerd), build.
+`.github/workflows/ci.yml` runs on every PR and on pushes to `main`: install with the lockfile, typecheck, lint, React Doctor (`pnpm doctor`, fails on errors), test (Worker tests in workerd), build.
 
 ```yaml
 name: CI
@@ -49,6 +49,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm lint
+      - run: pnpm doctor
       - run: pnpm test
       - run: pnpm build
 ```

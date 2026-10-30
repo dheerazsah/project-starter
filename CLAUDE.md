@@ -13,6 +13,7 @@
 | --- | --- |
 | Dev server, app and API (http://localhost:5173) | `pnpm dev` |
 | Typecheck · lint · test · build | `pnpm typecheck` · `pnpm lint` · `pnpm test` · `pnpm build` |
+| React code health ([React Doctor](https://www.npmjs.com/package/react-doctor)) | `pnpm doctor` (only your changes: `pnpm doctor --scope changed --base main`) |
 | Format | `pnpm format` |
 | Worker types after editing `wrangler.jsonc` | `pnpm cf-typegen` |
 | Local database migrations (once D1 is on) | `pnpm db:migrate:local` |

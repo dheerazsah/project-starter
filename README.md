@@ -8,7 +8,7 @@ No code generator and no template repo to fork: paste the files, ask Claude Code
 
 1. Create an empty folder and open it in your editor with Claude Code.
 2. Copy in every `.md` file from this repo **except** `README.md`, `LICENSE.md` and `CHANGELOG.md` (those describe the starter itself).
-3. Ask Claude Code: **"Set up the project from SETUP.md"**. It moves each file into place, scaffolds the app, writes the `.github/` templates, and runs install, typecheck, lint, test and build.
+3. Ask Claude Code: **"Set up the project from SETUP.md"**. It moves each file into place, scaffolds the app, writes the `.github/` templates, and runs install, typecheck, lint, React Doctor, test and build.
 4. Fill in the placeholders with the owner (roadmap task M0-1); the list is in [`00-START-HERE.md`](./00-START-HERE.md#placeholders).
 5. Delete `00-START-HERE.md`, `SETUP.md` and `GITHUB_TEMPLATES.md` from the new repo.
 

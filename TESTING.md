@@ -1,6 +1,6 @@
 # Testing
 
-What to test and how: Worker tests in the real Workers runtime with an in-memory D1 and R2, front-end checks, browser QA with text-based checks first, and accessibility. The quality bar: every build task passes `pnpm typecheck`, `pnpm lint`, `pnpm test` and `pnpm build`, then `code-reviewer`, then (for UI) `ux-reviewer` and `qa-tester` ([`WORKFLOW.md`](./WORKFLOW.md)).
+What to test and how: Worker tests in the real Workers runtime with an in-memory D1 and R2, front-end checks, browser QA with text-based checks first, and accessibility. The quality bar: every build task passes `pnpm typecheck`, `pnpm lint`, `pnpm doctor`, `pnpm test` and `pnpm build`, then `code-reviewer`, then (for UI) `ux-reviewer` and `qa-tester` ([`WORKFLOW.md`](./WORKFLOW.md)).
 
 ## Contents
 1. [The Worker test harness](#1-the-worker-test-harness)
@@ -213,6 +213,7 @@ Check row counts before and after for every table the migration touches. A migra
 ## 4. Front-end checks
 
 - `pnpm typecheck` and `pnpm lint` catch most front-end mistakes; keep them at zero warnings.
+- `pnpm doctor` runs [React Doctor](https://www.npmjs.com/package/react-doctor) over `src/`: React bugs ESLint misses (derived state copied into state, effects that should be events, unstable keys, needless re-renders), plus security, accessibility and dependency checks. Errors fail CI; fix new warnings too. While working, scan only your changes with `pnpm doctor --scope changed --base main`; `pnpm exec react-doctor why src/file.tsx:42` explains a finding. It runs with `--no-telemetry`, so no code or score leaves the machine except the dependency scan (package names only, to Socket.dev).
 - Pure logic in `src/lib/` (parsers, formatters, route parsing) can get unit tests. Add a second Vitest project for `src/` only if the owner approves the setup (jsdom is a new dependency).
 - Every screen is checked by hand or with Playwright for its **empty, loading, error and success** states. The States example page shows the shared ones.
 - `pnpm build` must pass; it typechecks every project and bundles.
@@ -285,7 +286,7 @@ Without it, inject `axe-core` from `node_modules` with `page.addScriptTag({ path
 
 ## 7. Before calling it done
 
-- [ ] `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build` pass (full runs once at the end; focused runs while working: `pnpm vitest run worker/test/items.test.ts`).
+- [ ] `pnpm typecheck`, `pnpm lint`, `pnpm doctor`, `pnpm test`, `pnpm build` pass (full runs once at the end; focused runs while working: `pnpm vitest run worker/test/items.test.ts`).
 - [ ] New server behaviour has tests, including a refused caller and, for writes, a race.
 - [ ] Migrations tested fresh and on existing data.
 - [ ] UI checked at the five widths, light and dark, keyboard, reduced motion, no console errors, zero axe violations.
