@@ -99,7 +99,7 @@ Feature IDs are permanent: never renumber or reuse one. **State** is one of: *Co
 
 ### F02 API health
 - **State:** Committed (from the starter). **Route:** `GET /api/health`. **Who:** anyone.
-- Answers `{ ok, environment, time }`; the Overview page shows it. Every `/api/*` response is `Cache-Control: private, no-store`; errors are JSON `{ error }`.
+- Answers `{ ok, environment, time }`; the Welcome page shows it. Every `/api/*` response is `Cache-Control: private, no-store`; errors are JSON `{ error }`.
 - **Code:** [`worker/index.ts`](../worker/index.ts), [`shared/api.ts`](../shared/api.ts), [`worker/test/health.test.ts`](../worker/test/health.test.ts).
 
 ### F03 {{FIRST_REAL_FEATURE}}

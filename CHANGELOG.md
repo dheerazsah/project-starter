@@ -2,6 +2,14 @@
 
 All notable changes to the starter. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/) (major: a file moves, is renamed or changes its contract with SETUP.md; minor: new files or sections; patch: fixes and wording).
 
+## [2.2.0] - 2026-10-30
+
+### Removed
+- `SETUP.md` step 10: the Overview (`/overview`) and States (`/states`) example pages, and the example items behind them (`src/features/items/`, `/items/:id`). Welcome is now the only page and the only `NAV` entry; `parseRoute` keeps a commented example for a `/section/:id` route.
+
+### Changed
+- The Welcome page shows the API's health ("API is up", read through `useResource`), which moved from Overview; the verify step, `CLAUDE.md` (sections), `docs/GUIDE.md` and `docs/TESTING.md` follow. Its first paragraph is now Prettier-stable.
+
 ## [2.1.0] - 2026-10-30
 
 ### Added

@@ -215,7 +215,7 @@ Check row counts before and after for every table the migration touches. A migra
 - `pnpm typecheck` and `pnpm lint` catch most front-end mistakes; keep them at zero warnings.
 - `pnpm doctor` runs [React Doctor](https://www.npmjs.com/package/react-doctor) over `src/`: React bugs ESLint misses (derived state copied into state, effects that should be events, unstable keys, needless re-renders), plus security, accessibility and dependency checks. Errors fail CI; fix new warnings too. While working, scan only your changes with `pnpm doctor --scope changed --base main`; `pnpm exec react-doctor why src/file.tsx:42` explains a finding. It runs with `--no-telemetry`, so no code or score leaves the machine except the dependency scan (package names only, to Socket.dev).
 - Pure logic in `src/lib/` (parsers, formatters, route parsing) can get unit tests. Add a second Vitest project for `src/` only if the owner approves the setup (jsdom is a new dependency).
-- Every screen is checked by hand or with Playwright for its **empty, loading, error and success** states. The States example page shows the shared ones.
+- Every screen is checked by hand or with Playwright for its **empty, loading, error and success** states. The shared ones are in `src/components/states.tsx`.
 - `pnpm build` must pass; it typechecks every project and bundles.
 
 ### React Doctor (optional static React check)

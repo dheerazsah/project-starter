@@ -2,7 +2,7 @@
 
 > **This is a recipe for Claude Code to execute.** When asked to "set up the project from SETUP.md", work through the steps below in order, in the project's root folder. Write every file exactly as given (code blocks are complete file contents unless a step says otherwise), then run the verify step. Don't commit, push or deploy; the owner does that. If a command prompts or fails, stop and report rather than improvising a different stack.
 
-**Result:** a running skeleton. Vite + React 19 + TypeScript, Tailwind CSS v4, shadcn/ui (`base-nova` style, built on Base UI, every component added), a Hono API on Cloudflare Workers (`/api/health` with a test), an app shell with sidebar, phone menu, theme menu, page/list/state building blocks, toasts, a GET cache and a tiny router. Three example pages: Welcome says what the starter set up, Overview and States show the building blocks; replace them once real pages exist.
+**Result:** a running skeleton. Vite + React 19 + TypeScript, Tailwind CSS v4, shadcn/ui (`base-nova` style, built on Base UI, every component added), a Hono API on Cloudflare Workers (`/api/health` with a test), an app shell with sidebar, phone menu, theme menu, page/list/state building blocks, toasts, a GET cache and a tiny router. One example page, Welcome, says what the starter set up and shows the API's health; replace it once real pages exist.
 
 **Before you start**
 - Node 22 or newer and pnpm 10 or newer (`node -v`, `pnpm -v`).
@@ -24,7 +24,7 @@
 │   ├── components/ui/                  Every shadcn component (base-nova); a few customized in step 7
 │   ├── components/                     app-shell, page, states, form-field, form-select, copy-button,
 │   │                                   live-region, theme-provider, chunk-boundary
-│   ├── features/                       welcome/, overview/, states/, items/ (examples)
+│   ├── features/                       welcome/ (an example)
 │   ├── lib/                            api, resource, route, route-focus, nav, notify, motion, utils, app
 │   └── hooks/use-mobile.ts             Added by shadcn (sidebar)
 ├── worker/                             Hono API (index.ts, http.ts, env.d.ts, test/health.test.ts)
@@ -1714,17 +1714,10 @@ import { APP_NAME, STORAGE_PREFIX } from "@/lib/app"
 // Add a route: a member of `Route`, a line in STATIC (or a case in
 // parseRoute for /section/:id), a page in App.tsx and, for a section, NAV.
 
-export type Route =
-  | { name: "welcome" }
-  | { name: "overview" }
-  | { name: "states" }
-  | { name: "item"; id: string }
-  | { name: "not-found" }
+export type Route = { name: "welcome" } | { name: "not-found" }
 
 const STATIC: Record<string, Route> = {
   "/": { name: "welcome" },
-  "/overview": { name: "overview" },
-  "/states": { name: "states" },
 }
 
 export function parseRoute(pathname: string): Route {
@@ -1733,10 +1726,10 @@ export function parseRoute(pathname: string): Route {
       ? pathname.slice(0, -1)
       : pathname
   if (STATIC[path]) return STATIC[path]
-  const [, section, param, extra] = path.split("/")
-  if (!param || extra !== undefined) return { name: "not-found" }
-  const value = decodeURIComponent(param)
-  if (section === "items") return { name: "item", id: value }
+  // A section with an id goes here, e.g. for /items/:id:
+  // const [, section, param, extra] = path.split("/")
+  // if (section === "items" && param && extra === undefined)
+  //   return { name: "item", id: decodeURIComponent(param) }
   return { name: "not-found" }
 }
 
@@ -1839,7 +1832,7 @@ export function useLeaveGuard(dirty: boolean, message: string) {
 
 export const TITLE_SUFFIX = ` · ${APP_NAME}`
 
-// "Overview · {{PROJECT_NAME}}"
+// "Welcome · {{PROJECT_NAME}}"
 export function useDocumentTitle(title: string | null | undefined) {
   useEffect(() => {
     document.title = title ? `${title}${TITLE_SUFFIX}` : APP_NAME
@@ -1928,7 +1921,7 @@ function announcePage() {
 #### `src/lib/nav.ts`
 
 ```ts
-import { LayoutGrid, Shapes, Sparkles, type LucideIcon } from "lucide-react"
+import { Sparkles, type LucideIcon } from "lucide-react"
 
 import type { Route } from "@/lib/route"
 
@@ -1949,20 +1942,6 @@ export const NAV: NavItem[] = [
     icon: Sparkles,
     path: "/",
     routes: ["welcome"],
-  },
-  {
-    id: "overview",
-    label: "Overview",
-    icon: LayoutGrid,
-    path: "/overview",
-    routes: ["overview", "item"],
-  },
-  {
-    id: "states",
-    label: "States",
-    icon: Shapes,
-    path: "/states",
-    routes: ["states"],
   },
 ]
 
@@ -2600,7 +2579,7 @@ import { cn } from "@/lib/utils"
 import { onLinkClick, useDocumentTitle } from "@/lib/route"
 
 // The standard page frame: width, padding, a small title and optional actions
-// on the right. Sets the tab title too ("Overview · {{PROJECT_NAME}}").
+// on the right. Sets the tab title too ("Welcome · {{PROJECT_NAME}}").
 export function Page({
   title,
   count,
@@ -3538,7 +3517,7 @@ export function CopyButton({
 
 ## Step 10. Example pages and the entry
 
-The Welcome page (`/`) says what the starter set up and what to do next; the Overview page (`/overview`) reads `/api/health` through `useResource`; the States page shows the empty, loading, error and toast states. Replace them once real pages exist (keep the pattern). To remove Welcome, delete `src/features/welcome/`, its route and `NAV` entry, and map `/` to the Overview page.
+The Welcome page (`/`) says what the starter set up and what to do next, and reads `/api/health` through `useResource`. Replace it once real pages exist (keep the pattern): delete `src/features/welcome/`, its route and `NAV` entry, and map `/` to the app's first page.
 
 #### `src/features/welcome/welcome-page.tsx`
 
@@ -3551,13 +3530,17 @@ import {
   Server,
   type LucideIcon,
 } from "lucide-react"
+import type { HealthResponse } from "@shared/api"
 
 import { Page, SectionLabel } from "@/components/page"
+import { ErrorState } from "@/components/states"
+import { Skeleton } from "@/components/ui/skeleton"
 import { APP_NAME } from "@/lib/app"
-import { onLinkClick } from "@/lib/route"
+import { useResource } from "@/lib/resource"
 
-// The first screen after setup: what the project starter gave this app and
-// what to do next. An example page; remove it once real pages exist.
+// The first screen after setup: what the project starter gave this app, the
+// API's health read through useResource (loading, error and data states),
+// and what to do next. An example page; replace it once real pages exist.
 type Feature = { icon: LucideIcon; title: string; description: string }
 
 const FEATURES: Feature[] = [
@@ -3597,19 +3580,16 @@ const NEXT_STEPS = [
   "Fill in the placeholders with the owner (task M0-1 in docs/ROADMAP.md).",
   "Delete 00-START-HERE.md, SETUP.md and GITHUB_TEMPLATES.md from the repo.",
   "Describe the product in docs/GUIDE.md, then plan the first milestone with the project-manager agent.",
-  "Replace the example pages (this one, Overview and States) with real ones.",
+  "Replace this page with the app's real pages.",
 ]
-
-const LINK =
-  "rounded-sm text-primary-ink underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
 
 export function WelcomePage() {
   return (
     <Page title="Welcome" width="narrow">
       <p className="text-reading text-foreground">
-        {APP_NAME} was set up from the project starter: a production-ready
-        base for a web app, with the docs and a team of Claude Code agents
-        that already know its conventions.
+        {APP_NAME} was set up from the project starter: a production-ready base
+        for a web app, with the docs and a team of Claude Code agents that
+        already know its conventions.
       </p>
 
       <SectionLabel>What the starter set up</SectionLabel>
@@ -3631,161 +3611,6 @@ export function WelcomePage() {
           <li key={step}>{step}</li>
         ))}
       </ol>
-
-      <p className="mt-6 text-sm text-muted-foreground">
-        The building blocks are on the{" "}
-        <a href="/overview" onClick={onLinkClick} className={LINK}>
-          Overview
-        </a>{" "}
-        and{" "}
-        <a href="/states" onClick={onLinkClick} className={LINK}>
-          States
-        </a>{" "}
-        pages.
-      </p>
-    </Page>
-  )
-}
-```
-
-#### `src/features/items/items.ts`
-
-```ts
-// Example data so the starter has something to list. Replace with
-// useResource("/api/…") once the API has real data.
-export type ExampleItem = {
-  id: string
-  title: string
-  owner: string
-  updated: string
-  status: "Draft" | "In review" | "Published"
-}
-
-export const EXAMPLE_ITEMS: ExampleItem[] = [
-  {
-    id: "welcome",
-    title: "Welcome guide for new starters",
-    owner: "Kari Nordmann",
-    updated: "Updated today",
-    status: "Published",
-  },
-  {
-    id: "brand",
-    title: "Brand colours and logo use",
-    owner: "Ola Hansen",
-    updated: "Updated 2 Oct",
-    status: "In review",
-  },
-  {
-    id: "travel",
-    title: "Travel and expenses",
-    owner: "Ingrid Berg",
-    updated: "Updated 28 Sep",
-    status: "Draft",
-  },
-]
-```
-
-#### `src/features/items/status.tsx`
-
-```tsx
-import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
-import type { ExampleItem } from "@/features/items/items"
-
-// Outline badges where the word carries the meaning; colour only supports it.
-const TONE: Record<ExampleItem["status"], string> = {
-  Draft: "text-muted-foreground",
-  "In review": "border-primary/30 bg-primary/5 text-primary-ink",
-  Published: "border-success/30 bg-success/8 text-success",
-}
-
-export function StatusBadge({ status }: { status: ExampleItem["status"] }) {
-  return (
-    <Badge variant="outline" className={cn(TONE[status])}>
-      {status}
-    </Badge>
-  )
-}
-```
-
-#### `src/features/items/item-page.tsx`
-
-```tsx
-import { MetaLine, Page } from "@/components/page"
-import { NotFoundPage } from "@/components/states"
-import { EXAMPLE_ITEMS } from "@/features/items/items"
-import { StatusBadge } from "@/features/items/status"
-
-// A detail page reached from a ListRow (/items/:id).
-export function ItemPage({ id }: { id: string }) {
-  const item = EXAMPLE_ITEMS.find((candidate) => candidate.id === id)
-  if (!item)
-    return (
-      <NotFoundPage
-        title="Item not found"
-        description="It may have been deleted, or the link is old."
-        back={{ label: "Back to overview", href: "/overview" }}
-      />
-    )
-  return (
-    <Page title={item.title} width="narrow">
-      <div className="rounded-xl border bg-card p-5 shadow-card sm:p-6">
-        <div className="flex flex-wrap items-center gap-2">
-          <StatusBadge status={item.status} />
-          <MetaLine parts={[item.owner, item.updated]} />
-        </div>
-        <p className="mt-4 text-reading text-foreground">
-          This is an example detail page. Replace it with your own content.
-        </p>
-      </div>
-    </Page>
-  )
-}
-```
-
-#### `src/features/overview/overview-page.tsx`
-
-```tsx
-import { Plus } from "lucide-react"
-import type { HealthResponse } from "@shared/api"
-
-import { ListCard, ListRow, Page, SectionLabel } from "@/components/page"
-import { ErrorState } from "@/components/states"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import { EXAMPLE_ITEMS } from "@/features/items/items"
-import { StatusBadge } from "@/features/items/status"
-import { notify } from "@/lib/notify"
-import { useResource } from "@/lib/resource"
-
-// The first screen: an example list in a ListCard, and the API's health
-// read through useResource (loading, error and data states).
-export function OverviewPage() {
-  return (
-    <Page
-      title="Overview"
-      actions={
-        <Button onClick={() => notify("Item created")}>
-          <Plus aria-hidden="true" />
-          New item
-        </Button>
-      }
-    >
-      <SectionLabel id="items-label" className="mt-0">
-        Items
-      </SectionLabel>
-      <ListCard label="Items">
-        {EXAMPLE_ITEMS.map((item) => (
-          <ListRow
-            key={item.id}
-            href={`/items/${item.id}`}
-            title={item.title}
-            meta={[item.owner, item.updated]}
-            trailing={<StatusBadge status={item.status} />}
-          />
-        ))}
-      </ListCard>
 
       <SectionLabel>API</SectionLabel>
       <ApiHealth />
@@ -3821,102 +3646,12 @@ function ApiHealth() {
 }
 ```
 
-#### `src/features/states/states-page.tsx`
-
-```tsx
-import { useState } from "react"
-import { Inbox } from "lucide-react"
-
-import { Page, SectionLabel } from "@/components/page"
-import { EmptyState, ErrorState, ListSkeleton } from "@/components/states"
-import { Button } from "@/components/ui/button"
-import { ApiRequestError } from "@/lib/api"
-import { notify } from "@/lib/notify"
-
-// Every screen needs empty, loading and error states (DESIGN_SYSTEM §12).
-// This page shows the shared ones side by side, plus toasts.
-export function StatesPage() {
-  const [loadingKey, setLoadingKey] = useState(0)
-  return (
-    <Page title="States">
-      <SectionLabel className="mt-0">Empty</SectionLabel>
-      <EmptyState
-        variant="inset"
-        icon={Inbox}
-        title="No items yet"
-        description="Items you create show up here."
-        action={
-          <Button variant="outline" size="sm" onClick={() => notify("Item created")}>
-            New item
-          </Button>
-        }
-      />
-
-      <SectionLabel>
-        Loading{" "}
-        <button
-          type="button"
-          onClick={() => setLoadingKey((key) => key + 1)}
-          className="ml-1 rounded-sm text-primary-ink underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
-        >
-          Replay
-        </button>
-      </SectionLabel>
-      <ListSkeleton key={loadingKey} rows={3} />
-
-      <SectionLabel>Error</SectionLabel>
-      <ErrorState
-        className="border border-solid bg-card shadow-card"
-        error={
-          new ApiRequestError(
-            "The server didn't answer. Try again in a moment.",
-            503
-          )
-        }
-        onRetry={() => notify("Retried", { type: "info" })}
-      />
-
-      <SectionLabel>Toasts</SectionLabel>
-      <div className="flex flex-wrap gap-2">
-        <Button variant="outline" onClick={() => notify("Saved")}>
-          Show success
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() =>
-            notify("Item deleted", {
-              action: { label: "Undo", onClick: () => notify("Item restored") },
-            })
-          }
-        >
-          Show with Undo
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() =>
-            notify("Couldn't save", {
-              type: "error",
-              description: "Check your connection and try again.",
-            })
-          }
-        >
-          Show error
-        </Button>
-      </div>
-    </Page>
-  )
-}
-```
-
 #### `src/App.tsx`
 
 ```tsx
 import { AppShell } from "@/components/app-shell"
 import { ChunkBoundary } from "@/components/chunk-boundary"
 import { NotFoundPage } from "@/components/states"
-import { ItemPage } from "@/features/items/item-page"
-import { OverviewPage } from "@/features/overview/overview-page"
-import { StatesPage } from "@/features/states/states-page"
 import { WelcomePage } from "@/features/welcome/welcome-page"
 import { usePath, useRoute, type Route } from "@/lib/route"
 
@@ -3927,12 +3662,6 @@ function page(route: Route) {
   switch (route.name) {
     case "welcome":
       return <WelcomePage />
-    case "overview":
-      return <OverviewPage />
-    case "states":
-      return <StatesPage />
-    case "item":
-      return <ItemPage id={route.id} />
     case "not-found":
       return <NotFoundPage />
   }
@@ -4043,7 +3772,7 @@ pnpm test
 pnpm build
 ```
 
-Then a quick run: `pnpm dev`, open http://localhost:5173 and check that the Welcome page renders, `/overview` renders with "API is up", `/states` renders, an unknown path shows "Page not found", the theme menu switches light and dark, and the console has no errors. `curl -s http://localhost:5173/api/health` answers `{"ok":true,...}`. Stop the dev server afterwards.
+Then a quick run: `pnpm dev`, open http://localhost:5173 and check that the Welcome page renders with "API is up", an unknown path shows "Page not found", the theme menu switches light and dark, and the console has no errors. `curl -s http://localhost:5173/api/health` answers `{"ok":true,...}`. Stop the dev server afterwards.
 
 Finally list the placeholders left for the owner: `grep -rnE "\{\{[A-Z0-9_]+\}\}" --exclude-dir=node_modules .`
 
