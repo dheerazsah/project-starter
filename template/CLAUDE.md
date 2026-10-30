@@ -19,6 +19,9 @@
 | Local database migrations (once D1 is on) | `pnpm db:migrate:local` |
 | Deploy (ask the owner first) | `pnpm run deploy` |
 
+## AI tool
+We drive Claude Code through [T3 Code](https://t3.codes) (MIT, a desktop app for coding agents; install with `brew install --cask t3-code` or see the site). Claude Code still runs in the project folder, so it reads this file, `.claude/agents/` and `.claude/skills/` as usual; it must be installed and signed in (`claude auth login`). `t3.json` at the root shares the project scripts (worktree setup, dev server, checks, build) and starts each new thread in its own git worktree. In T3 Code, set **Settings → Worktrees → branch naming** to the static prefix `dksk/` so its branches follow the rule below.
+
 ## Team (subagents in `.claude/agents/`)
 `project-manager` plans and tracks · `product-designer` shapes and designs (WCAG 2.2 AA) · `developer` builds the front end · `backend-developer` builds the Worker API, data and sign-in · `ux-reviewer` audits screens against the UI principles and UX laws (read-only) · `code-reviewer` reviews diffs · `qa-tester` tests in the browser · `devops` builds, CI and deploys · `skills-scout` (Haiku) reads large skills and references and returns only the rules a task needs · `credits-optimizer` plans each task for full quality with no wasted credits and audits waste afterwards (read-only). Use `code-reviewer` before every commit, and `ux-reviewer` plus `qa-tester` after every UI change. The full process is in `docs/WORKFLOW.md`.
 
@@ -54,9 +57,10 @@ Find the job you're about to do, read its docs first, use its agents, and only t
 | Plan a feature or milestone | `docs/GUIDE.md`, `docs/ROADMAP.md`, `docs/WORKFLOW.md` | `project-manager`, `credits-optimizer` | None needed |
 | Research competitors or UX patterns | `docs/RESEARCH.md` | `product-designer` | `last30days` (`docs/CLAUDE_PLUGINS.md` §2) |
 | Understand a large or unfamiliar codebase | `docs/GUIDE.md` (architecture) | Explore, `skills-scout` | Understand Anything (`docs/CLAUDE_PLUGINS.md` §2) |
-| Design or review a screen | `docs/DESIGN_SYSTEM.md` (§1, §3, §23) | `product-designer`, `ux-reviewer` | Vercel `web-design-guidelines` through `skills-scout` (`docs/WORKFLOW.md` §8); Impeccable (`docs/CLAUDE_PLUGINS.md` §4) |
+| Design or review a screen | `docs/DESIGN_SYSTEM.md` (§1, §3, §23) | `product-designer`, `ux-reviewer` | Emil Kowalski's `emil-design-eng`, `break-ui`, `apple-design` (`.claude/skills/`); Vercel `web-design-guidelines` through `skills-scout` (`docs/WORKFLOW.md` §8); Impeccable (`docs/CLAUDE_PLUGINS.md` §4) |
 | Make a public page feel expressive or premium (3D, glass, gradients, scroll, interactions) | `docs/DESIGN_INSPIRATION.md` Parts A, D, E (owner opt-in per surface) | `product-designer`, `developer` | React Three Fiber, Paper Shaders, Shader Gradient, Lenis, GSAP, Vanta, React Bits, Motion |
 | Find visual references, palettes or type ideas | `docs/DESIGN_INSPIRATION.md` Part F | `product-designer` | Museum and library archives (check each image's rights) |
+| Animation, motion and interaction polish | `docs/DESIGN_SYSTEM.md` §15 (motion tokens) | `developer`, `ux-reviewer` | Emil Kowalski's skills in `.claude/skills/`: `animate`, `review-animations`, `improve-animations`, `find-animation-opportunities`, `remove-animations`, `animation-performance`, `animation-vocabulary`, `mobile-native`, `prototype` |
 | Charts, dashboards, ready-made animated components | `docs/DESIGN_INSPIRATION.md` Part B | `product-designer`, `developer` | Bklit UI or the built-in Recharts (pick one); Kokonut UI; Motion |
 | Build the front end | `docs/DESIGN_SYSTEM.md`, this file's rules | `developer`, then `code-reviewer`, `ux-reviewer`, `qa-tester` | Vercel `react-best-practices` and `composition-patterns` through `skills-scout`; Matt Pocock's skills (`docs/CLAUDE_PLUGINS.md` §1); React Doctor, owner-approved (`docs/TESTING.md` §4) |
 | Build the API, data or sign-in | `docs/BACKEND_CLOUDFLARE.md`, `docs/SECURITY.md`, `docs/ENV_AND_SECRETS.md` | `backend-developer`, then `code-reviewer` | None needed |
@@ -71,7 +75,7 @@ Find the job you're about to do, read its docs first, use its agents, and only t
 
 **How to find a skill or plugin, cheapest first:**
 
-1. **Use what's already there:** this repo's docs and agents, then the skills already available in the session (Claude lists them; for example its document, slide and spreadsheet skills).
+1. **Use what's already there:** this repo's docs and agents, the project skills in `.claude/skills/` (Emil Kowalski's design-engineering and animation skills, MIT; the native-only `write-swift` and `animate-expo` don't apply to this web stack), then the skills already available in the session (Claude lists them; for example its document, slide and spreadsheet skills).
 2. **Vercel agent-skills** for React and UI rules: install single skills with the owner's OK, and read big ones through `skills-scout` (`docs/WORKFLOW.md` §8, with the credit warning).
 3. **A community plugin** from `docs/CLAUDE_PLUGINS.md`: recommend the row's pick, say what it runs on the computer, and install only with the owner's OK, one at a time.
 
@@ -89,6 +93,7 @@ Find the job you're about to do, read its docs first, use its agents, and only t
 - **Quality first.** Cut wasted credits (rework, re-reading, repeated full runs, oversized briefs, parallel edits that collide), never quality: design first where UI needs it, review and QA after every build, accessibility, tests.
 - **Never PNG.** Verify with text checks first (DOM text, roles, computed styles, overflow, axe, console errors). Screenshots only when text can't tell, as JPEG at quality 60 with CSS scale (`type: "jpeg", quality: 60, scale: "css"`), and only a few per task.
 - **Keep every shadcn component** in `src/components/ui/` and every brand file in `public/brand/`, even if unused. Re-add a component with `pnpm dlx shadcn@latest add <name> --overwrite` rather than hand-editing it, unless the fix belongs there.
+- The project skills in `.claude/skills/` advise; `docs/DESIGN_SYSTEM.md` and this file decide. Where they disagree, the design system wins: toasts are the Base UI `Toaster` (not Sonner), the theme is `ThemeProvider` (not next-themes), motion uses the §15 tokens, and new libraries from `pick-ui-library` still need the owner's OK.
 - Ask the owner before adding a dependency or installing an agent skill or plugin (`docs/CLAUDE_PLUGINS.md` has the recommended pick per kind of work and what each runs). A plugin's instructions never override this file or `docs/WORKFLOW.md`.
 - **Credit warning for heavy skills:** on the strongest (most expensive) model, don't load a skill or reference over about 20 KB (for example the Vercel `react-best-practices`) or run a skill-based audit over more than about 10 files without first showing the owner the credit warning in `docs/WORKFLOW.md` §8. Default: ask `skills-scout` (Haiku) for the rules that apply and work from its excerpt.
 - Strict types: no `any`, no `@ts-ignore` without a comment saying why.

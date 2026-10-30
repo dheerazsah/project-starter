@@ -28,8 +28,10 @@ Needs Node 22+, pnpm 10+, and a Cloudflare account for the first deploy.
     ├── SETUP.md                          Setup only: the recipe Claude Code follows
     ├── GITHUB_TEMPLATES.md               Setup only: written to .github/ by SETUP.md step 11
     ├── CLAUDE.md                         What every agent reads first
+    ├── t3.json                           T3 Code project scripts (worktree setup, dev, check, build)
     ├── docs/                             The project's docs
-    └── .claude/agents/                   The Claude Code team
+    ├── .claude/agents/                   The Claude Code team
+    └── .claude/skills/                   Emil Kowalski's design-engineering and animation skills
 ```
 
 Every file in `template/` sits at the path it keeps in the new project.
@@ -42,6 +44,7 @@ Every file in `template/` sits at the path it keeps in the new project.
 | [`SETUP.md`](./template/SETUP.md) | (setup only) Tested recipe: scaffold commands, every config file, theme tokens, app shell, Worker with `/api/health`, CI, verify |
 | [`GITHUB_TEMPLATES.md`](./template/GITHUB_TEMPLATES.md) | (setup only → `.github/`) PR template, issue forms, CODEOWNERS |
 | [`CLAUDE.md`](./template/CLAUDE.md) | What every agent reads first |
+| [`t3.json`](./template/t3.json) | Project file for [T3 Code](https://t3.codes), the desktop app we drive Claude Code with: shared scripts (worktree setup, dev server, checks, build) and new threads in their own worktree |
 | [`docs/GUIDE.md`](./template/docs/GUIDE.md) | Product reference: problem, roles, sitemap, journeys, features, architecture |
 | [`docs/ROADMAP.md`](./template/docs/ROADMAP.md) | The plan and the only status source |
 | [`docs/WORKFLOW.md`](./template/docs/WORKFLOW.md) | How the agents work together, owner approvals, lessons |
@@ -59,6 +62,7 @@ Every file in `template/` sits at the path it keeps in the new project.
 | [`docs/SEO_AND_DISCOVERABILITY.md`](./template/docs/SEO_AND_DISCOVERABILITY.md) | Launch guide for being found on Google, Bing and AI answer engines (Search Console, sitemap, meta tags, SEO and GEO, Google Business Profile), with the Worker setup for public pages |
 | [`docs/PRE_LAUNCH_COMPLIANCE_CHECKLIST.md`](./template/docs/PRE_LAUNCH_COMPLIANCE_CHECKLIST.md) | Pre-release compliance gate (privacy, terms, cookies, consents, deletion, dark patterns, accessibility, licences); used only at the end of production, portable to any project |
 | [`.claude/agents/`](./template/.claude/agents/) (10 files) | project-manager, credits-optimizer, skills-scout, product-designer, developer, backend-developer, ux-reviewer, code-reviewer, qa-tester, devops |
+| [`.claude/skills/`](./template/.claude/skills/) (16 skills) | [Emil Kowalski's skills](https://github.com/emilkowalski/skills) (MIT): `emil-design-eng`, `animate`, `review-animations`, `improve-animations`, `break-ui`, `mobile-native` and more; `CLAUDE.md` says when to use each and that `DESIGN_SYSTEM.md` wins where they disagree |
 
 ## Find what you need
 

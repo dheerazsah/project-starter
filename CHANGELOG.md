@@ -2,6 +2,14 @@
 
 All notable changes to the starter. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/) (major: a file moves, is renamed or changes its contract with SETUP.md; minor: new files or sections; patch: fixes and wording).
 
+## [2.2.0] - 2026-10-30
+
+### Added
+- `template/.claude/skills/`: [Emil Kowalski's skills](https://github.com/emilkowalski/skills) (MIT, commit a81dbca, licence included): `emil-design-eng`, `animate`, `review-animations`, `improve-animations`, `find-animation-opportunities`, `remove-animations`, `animation-performance`, `animation-vocabulary`, `apple-design`, `break-ui`, `mobile-native`, `pick-ui-library`, `prototype`, `ask-sonner`, `animate-expo`, `write-swift`.
+- `template/CLAUDE.md`: an "Animation, motion and interaction polish" row and Emil's skills in "Design or review a screen"; the project skills as step 1 of finding a skill; a rule that `DESIGN_SYSTEM.md` wins over the skills (Base UI toasts, not Sonner; `ThemeProvider`, not next-themes; §15 motion tokens).
+- `template/t3.json` and an "AI tool" section in `template/CLAUDE.md`: [T3 Code](https://t3.codes) is the app we drive Claude Code with; shared scripts (worktree setup, dev, check, build), threads in their own worktree, `dksk/` as its branch prefix.
+- `README.md` and `template/00-START-HERE.md`: rows for `t3.json` and `.claude/skills/`.
+
 ## [2.1.0] - 2026-10-30
 
 ### Added

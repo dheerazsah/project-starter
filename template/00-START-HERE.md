@@ -21,7 +21,8 @@ A set of Markdown files that turns an empty folder into a production-ready proje
 | `00-START-HERE.md` | This guide (delete after setup) |
 | `SETUP.md` | **A recipe for Claude Code**: scaffold commands, every config file, the theme tokens, the app shell, lib helpers, the Worker with `/api/health` and its test, CI, verify (delete after setup) |
 | `GITHUB_TEMPLATES.md` | PR template, issue forms, CODEOWNERS, each with its path; SETUP.md step 11 writes them to `.github/`, then delete it |
-| `CLAUDE.md` | What every agent reads first: stack, commands, team, docs, rules |
+| `CLAUDE.md` | What every agent reads first: stack, commands, AI tool, team, docs, rules |
+| `t3.json` | Project file for [T3 Code](https://t3.codes), the desktop app we drive Claude Code with: worktree setup, dev, check and build scripts |
 | `docs/GUIDE.md` | Reference template: product, problem, sitemap, journeys, roles, features (F-IDs), architecture, develop, deploy |
 | `docs/ROADMAP.md` | The plan and the only status source: dashboard, queue, decisions, risks, log (M0 is pre-filled) |
 | `docs/DESIGN_SYSTEM.md` | UI principles (§1), UX laws (§3), tokens, components, motion, accessibility, copy, owner feedback, and the **UX/UI review checklist (§23)** |
@@ -48,6 +49,7 @@ A set of Markdown files that turns an empty folder into a production-ready proje
 | `.claude/agents/code-reviewer.md` | Reviews diffs before every commit (read-only) |
 | `.claude/agents/qa-tester.md` | Tests in the browser: widths, themes, keyboard, axe; text checks first, JPEG only |
 | `.claude/agents/devops.md` | Builds, CI, secrets, deploys (asks before production) |
+| `.claude/skills/` | Emil Kowalski's design-engineering and animation skills (MIT, licence included); Claude Code loads them as project skills |
 
 The agent files carry their frontmatter (`name`, `description`, `tools`), so they work as soon as they're in `.claude/agents/`; each file name (without `.md`) must match its `name`.
 
