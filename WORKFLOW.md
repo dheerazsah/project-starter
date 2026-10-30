@@ -70,7 +70,7 @@ Never reset, check out, stash or clean uncommitted work. If a task conflicts wit
 - **One branch and one PR per milestone**, into `main`, with **one commit per task**: imperative subject, a body that says why.
 - When several tasks' changes share a file, split commits by hunk (`git add -p`) so each commit is one task; the owner approves each.
 - **Every commit typechecks on its own**, so any commit can be checked out, bisected or reverted. Plan the split so each commit carries what it needs (a type with its first use, a migration with its query). After the owner's commits, check each one in a throwaway worktree, which leaves the working tree alone: `git worktree add ../check <sha>`, `ln -s "$PWD/node_modules" ../check/node_modules`, `pnpm --dir ../check typecheck`, then `git worktree remove ../check`. If a commit can't typecheck alone, say so before the push and suggest merging it with the next one.
-- PR description: summary, a few JPEG screenshots from `qa-tester` (never PNG), what changed (one line per commit), how to verify (`pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`), checklist, and the compare URL.
+- PR description: summary, a few JPEG screenshots from `qa-tester` (never PNG), what changed (one line per commit), how to verify (`pnpm typecheck`, `pnpm lint`, `pnpm doctor`, `pnpm test`, `pnpm build`), checklist, and the compare URL.
 - `code-reviewer` before every commit.
 
 ## 5. Status: one place only

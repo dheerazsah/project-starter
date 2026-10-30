@@ -11,7 +11,7 @@ A flat set of Markdown files that turns an empty folder into a production-ready 
 3. Ask Claude Code: **"Set up the project from SETUP.md"**. It will:
    - move each file to its place (table below),
    - scaffold and configure the app by following `SETUP.md` step by step (including the `.github/` files from `GITHUB_TEMPLATES.md`),
-   - run the verify step (install, typecheck, lint, test, build) and report.
+   - run the verify step (install, typecheck, lint, React Doctor, test, build) and report.
 4. Fill in the placeholders (table below) with the owner; that's roadmap task M0-1.
 5. Delete `00-START-HERE.md`, `SETUP.md` and `GITHUB_TEMPLATES.md` from the repo afterwards, or keep a copy outside it for the next project.
 

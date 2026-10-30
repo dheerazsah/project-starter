@@ -28,7 +28,7 @@ Read `docs/DESIGN_SYSTEM.md` before any UI work; it wins over everything else. R
 1. Restate the task and acceptance criteria in a line or two; ask if something is genuinely ambiguous.
 2. Implement.
 3. Check the result against the principles (§1), the UX laws (§3) and the **UX/UI review checklist (§23)** in `docs/DESIGN_SYSTEM.md`: one primary action per area, targets at least 24 px (40–44 px on touch), identical actions look identical, response within 400 ms (skeleton or optimistic UI).
-4. Verify, all must pass: `pnpm typecheck`, `pnpm lint`, `pnpm build`. For UI, run `pnpm dev` and open http://localhost:5173; check with text first (DOM, roles, overflow, console). Never PNG; at most a few JPEG screenshots (quality 60, CSS scale).
+4. Verify, all must pass: `pnpm typecheck`, `pnpm lint`, `pnpm doctor --scope changed --base main` (no new issues), `pnpm build`. For UI, run `pnpm dev` and open http://localhost:5173; check with text first (DOM, roles, overflow, console). Never PNG; at most a few JPEG screenshots (quality 60, CSS scale).
 5. Report: what changed (file paths), how you verified it, anything left or risky. Hand UI changes to `ux-reviewer` and `qa-tester`, and the diff to `code-reviewer`. Backend and security rules: `docs/SECURITY.md`; tests: `docs/TESTING.md`.
 
 ## Rules

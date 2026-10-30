@@ -86,6 +86,7 @@ Then write `package.json` exactly as below (the name is your slug; the version r
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "doctor": "react-doctor --yes --no-telemetry",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc -b",
     "preview": "vite preview",
@@ -132,6 +133,7 @@ Then write `package.json` exactly as below (the name is your slug; the version r
     "playwright": "^1",
     "prettier": "^3.9.9",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "react-doctor": "^0.9.18",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8",
     "vite": "^8",
@@ -3856,7 +3858,7 @@ Replace Vite's `README.md` with a short one: the project name, `pnpm install && 
 
 ## Step 11. CI workflow and GitHub templates
 
-Write `.github/workflows/ci.yml` (runs install, typecheck, lint, test and build on every PR; details and the optional deploy job in `docs/DEPLOY_AND_CI.md`):
+Write `.github/workflows/ci.yml` (runs install, typecheck, lint, React Doctor, test and build on every PR; details and the optional deploy job in `docs/DEPLOY_AND_CI.md`):
 
 ```yaml
 name: CI
@@ -3889,6 +3891,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm lint
+      - run: pnpm doctor
       - run: pnpm test
       - run: pnpm build
 ```
@@ -3915,6 +3918,7 @@ pnpm cf-typegen
 pnpm format
 pnpm typecheck
 pnpm lint
+pnpm doctor
 pnpm test
 pnpm build
 ```

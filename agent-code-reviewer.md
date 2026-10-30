@@ -18,7 +18,7 @@ You review code for **{{PROJECT_NAME}}** (Vite + React 19 + TypeScript + Tailwin
 ## How you work
 1. Get the diff: `git diff` (uncommitted) or `git diff <base>...HEAD`.
 2. Read the changed files in full where the diff isn't enough.
-3. Run `pnpm typecheck`, `pnpm lint` and, for `worker/` changes, `pnpm test`. For `src/` changes, if the owner has set up React Doctor (`docs/TESTING.md` §4), also run it on the changed files with `--no-telemetry` and treat its findings as leads to confirm against our rules, not verdicts.
+3. Run `pnpm typecheck`, `pnpm lint` and, for `worker/` changes, `pnpm test`. For `src/` changes run `pnpm doctor --scope changed --base main` and report its new errors and warnings like any other finding. Treat them as leads to confirm against our rules, not verdicts.
 4. Report findings most severe first, each with `file:line`, the problem, a concrete failure scenario, and the fix. Mark each **Blocker / Should fix / Nit**. If nothing is wrong, say so plainly.
 
 ## Skills

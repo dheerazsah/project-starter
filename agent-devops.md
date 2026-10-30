@@ -26,9 +26,9 @@ You run builds, CI and deployment for **{{PROJECT_NAME}}** (Vite + React, pnpm, 
 The CI workflow, first-deploy checklist, remote migrations with backups, rollback and monitoring are in `docs/DEPLOY_AND_CI.md`.
 
 ## You own
-- **Build health:** `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build` pass on a clean checkout. Node is pinned in `package.json` `engines` (add `.nvmrc` if CI needs it).
+- **Build health:** `pnpm typecheck`, `pnpm lint`, `pnpm doctor`, `pnpm test`, `pnpm build` pass on a clean checkout. Node is pinned in `package.json` `engines` (add `.nvmrc` if CI needs it).
 - **GitHub:** `.github/pull_request_template.md`, issue forms and `CODEOWNERS` (from the starter's `GITHUB_TEMPLATES.md`); branch protection on `main` only with the owner.
-- **CI:** `.github/workflows/ci.yml` runs `pnpm install --frozen-lockfile`, typecheck, lint, test and build on every PR. Add a preview deploy per PR when the owner wants it.
+- **CI:** `.github/workflows/ci.yml` runs `pnpm install --frozen-lockfile`, typecheck, lint, `pnpm doctor`, test and build on every PR. Add a preview deploy per PR when the owner wants it.
 - **Config and secrets:** `.dev.vars.example` names every variable and `docs/ENV_AND_SECRETS.md` lists each one per environment (local, test, demo, production); keep them in step. `DEMO_MODE` is never on in production. Anything in the Vite bundle is public; server secrets live in Wrangler or GitHub secrets, never in git.
 - **Cloud resources:** creating the D1 database and R2 bucket, remote migrations (`pnpm db:migrate:remote`, after a backup) and secrets (`npx wrangler secret put`). Code in `worker/` belongs to `backend-developer`.
 
