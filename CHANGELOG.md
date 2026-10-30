@@ -2,6 +2,15 @@
 
 All notable changes to the starter. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/) (major: a file moves, is renamed or changes its contract with SETUP.md; minor: new files or sections; patch: fixes and wording).
 
+## [2.0.0] - 2026-10-30
+
+### Changed
+- **The files now live in the layout of a new project.** Everything a new project uses moved into `template/`: `CLAUDE.md`, `00-START-HERE.md`, `SETUP.md` and `GITHUB_TEMPLATES.md` at its root, the docs in `template/docs/`, and the agents in `template/.claude/agents/<name>.md` (the `agent-` prefix is gone). A new project copies `template/` as is, so step 0 (moving each file into place) is gone.
+- `00-START-HERE.md`, `SETUP.md` ("Before you start") and `README.md` describe copying `template/`; the README links point at the new paths and show the repo layout.
+
+### Added
+- A short root `CLAUDE.md` for working on the starter itself. The template's `CLAUDE.md` no longer sits at the repo root, where Claude Code loaded it as instructions for this repo.
+
 ## [1.9.0] - 2026-10-30
 
 ### Added
