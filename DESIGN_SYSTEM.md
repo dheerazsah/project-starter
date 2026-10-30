@@ -460,6 +460,7 @@ Rules:
 - History never animates: only things that are new to the person move.
 - **Reduced motion:** every animation is `motion-safe:` (or inside `@media (prefers-reduced-motion: no-preference)`), and a global safety net in `src/index.css` sets durations to ~0 under `prefers-reduced-motion: reduce`, so third-party primitives stop moving too. Delays are kept, so `Delayed` still hides quick skeletons. Colour changes still happen, instantly.
 - Small touches are fine: nav icons tilt slightly on hover, the theme icon turns on hover.
+- Drag, layout and shared-element transitions that CSS can't do use Motion; decorative effects (3D, glass, moving gradients, liquid metal, animated backgrounds, smooth scroll, scroll-scrubbed timelines) are owner opt-in exceptions to this section, never in the app shell. Both follow `DESIGN_INSPIRATION.md`.
 
 ## 16. Route focus
 

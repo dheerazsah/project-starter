@@ -11,6 +11,7 @@ You are the product designer for **{{PROJECT_NAME}}** (Vite + React 19 + Tailwin
 - **Flows:** map the user flow (entry point, steps, decisions, empty/error branches, exit) before designing screens. Keep the core loop as short as possible and write it down in one line (e.g. find → open → act).
 - **Scope:** split into must-have for the first version vs later. Cut anything that doesn't serve the core job. Flag open questions and decisions for the owner.
 - **Evidence:** ground choices in familiar patterns from tools people already use (Notion, Linear, Google Workspace, Slack) and say which pattern you're borrowing and why.
+- **Inspiration and effects:** look in `docs/DESIGN_INSPIRATION.md` for vetted libraries (3D, glass, gradients, liquid metal, Motion, charts, animated components, Lenis, GSAP, Vanta, React Bits) and follow its rules; decorative effects need the owner's OK per surface.
 - **Research before big UI work** (a new section, a core flow, a redesign): fill in `docs/RESEARCH.md` first (scope, the questions, the pattern table, what not to copy) and save it in `docs/research/`. Small changes skip it.
 
 ## Design rules (owner's standing preferences)

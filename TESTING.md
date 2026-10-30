@@ -217,6 +217,17 @@ Check row counts before and after for every table the migration touches. A migra
 - Every screen is checked by hand or with Playwright for its **empty, loading, error and success** states. The States example page shows the shared ones.
 - `pnpm build` must pass; it typechecks every project and bundles.
 
+### React Doctor (optional static React check)
+
+[react-doctor](https://github.com/millionco/react-doctor) (MIT, from millionco) scans React code without running it for state and effect misuse, performance, architecture, security, accessibility and maintainability. It complements `pnpm lint` and `code-reviewer`; it doesn't replace them, a code review, or the React DevTools Profiler.
+
+- **Owner approval first**, like any dependency: `npx` downloads and runs a package. Once approved, pin a version instead of `@latest`.
+- **Run it on what changed:** `npx react-doctor@latest --no-telemetry src/a.tsx src/b.tsx`, or with no file names for the whole project. `--format json` gives machine-readable output. Rules are configured in `doctor.config.ts` at the project root.
+- **Telemetry:** by default it reports crashes, run traces and anonymous counters (versions, framework, project size, rule names and counts, no file contents) to Sentry. Always pass `--no-telemetry` here.
+- **Findings are leads, not verdicts.** Where it disagrees with our rules (shadcn on Base UI, `DESIGN_SYSTEM.md`, `SECURITY.md`), ours win: configure or suppress the rule rather than bending the code.
+- **`install` and `ci install` need a separate owner OK.** `install` adds an agent skill (Claude Code, Cursor, Codex, OpenCode) and `ci install` adds a pull request workflow that posts a summary comment. Its README doesn't list the files either one writes, so run them on a throwaway branch and read `git status` and the diff first. `devops` decides whether the workflow fits `docs/DEPLOY_AND_CI.md`.
+- Checked on 30 October 2026 against its README and docs. They list React, Vite and Preact but don't state React 19, so treat the first run on this starter as a trial.
+
 ## 5. Browser QA with Playwright (text first)
 
 Playwright is a devDependency. Install a browser once: `pnpm exec playwright install chromium` (or use an installed Chrome with `channel: "chrome"`). Keep QA scripts in a temporary folder, not in the repo.
@@ -290,4 +301,5 @@ Without it, inject `axe-core` from `node_modules` with `page.addScriptTag({ path
 - [ ] Migrations tested fresh and on existing data.
 - [ ] UI checked at the five widths, light and dark, keyboard, reduced motion, no console errors, zero axe violations.
 - [ ] `DESIGN_SYSTEM.md` §23 checklist walked (`ux-reviewer` for UI changes).
+- [ ] If React Doctor is set up (§4), it was run on the changed `src/` files and every finding is fixed, configured away with a reason, or noted as a nit.
 - [ ] No PNGs produced; at most a few JPEGs.

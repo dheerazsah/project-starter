@@ -83,6 +83,8 @@ Top to bottom. Feature IDs (F) match [`GUIDE.md`](./GUIDE.md).
 | Placeholders left in shipped text (`{{PROJECT_NAME}}` in the tab title) | M0-1 checks with `grep -rnE "\{\{[A-Z0-9_]+\}\}" --exclude-dir=node_modules .` |
 | Brand colour fails contrast as text in dark mode | `--primary-ink` is a lighter tint in dark mode; measure it (M0-2) |
 | Parallel build agents editing the same files | One build task at a time |
+| A public site launches but can't be found (no Search Console, sitemap or meta tags; every URL the same `index.html`) | Record the two early decisions in `SEO_AND_DISCOVERABILITY.md` in `GUIDE.md` at the start; run the guide at launch with the compliance check |
+| Public release without the compliance check (privacy, cookies, consents, deletion, accessibility, licences) | Before the first public release, the owner asks `project-manager` to turn `docs/PRE_LAUNCH_COMPLIANCE_CHECKLIST.md` into a release task; not earlier |
 | The dev server sometimes stops answering on `127.0.0.1` | Use http://[::1]:5173 or restart `pnpm dev` |
 
 ## Log

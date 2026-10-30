@@ -28,6 +28,7 @@ A flat set of Markdown files that turns an empty folder into a production-ready 
 | `ROADMAP.md` | `docs/ROADMAP.md` | The plan and the only status source: dashboard, queue, decisions, risks, log (M0 is pre-filled) |
 | `DESIGN_SYSTEM.md` | `docs/DESIGN_SYSTEM.md` | UI principles (§1), UX laws (§3), tokens, components, motion, accessibility, copy, owner feedback, and the **UX/UI review checklist (§23)** |
 | `WORKFLOW.md` | `docs/WORKFLOW.md` | The agentic process: who does what, in which order, what the owner approves, commits, demo data, handoffs, lessons |
+| `DESIGN_INSPIRATION.md` | `docs/DESIGN_INSPIRATION.md` | Design inspiration and toolkit: 3D (React Three Fiber), liquid glass, shader gradients, liquid metal, Motion, Bklit UI charts, Kokonut UI components, Manus, Lenis, GSAP, Vanta, React Bits, premium interaction patterns, visual reference archives; licences, stack fit and rules for each |
 | `RESEARCH.md` | `docs/RESEARCH.md` | Competitor and UX research template for big UI work: questions, output format, what not to copy |
 | `BACKEND_CLOUDFLARE.md` | `docs/BACKEND_CLOUDFLARE.md` | Worker + Hono, D1, R2, KV vs DO, Durable Objects and WebSockets, Workers AI vs Claude, cron, vars vs secrets, a full `wrangler.jsonc` reference; migrations, seeds and demo accounts (§2) |
 | `ENV_AND_SECRETS.md` | `docs/ENV_AND_SECRETS.md` | Every var and secret, local vs test vs demo vs production, how to set each, demo vs production split |
@@ -36,11 +37,15 @@ A flat set of Markdown files that turns an empty folder into a production-ready 
 | `TESTING.md` | `docs/TESTING.md` | The Worker test harness (in-memory D1), what to test, migration tests, Playwright text-first QA, axe |
 | `DEPLOY_AND_CI.md` | `docs/DEPLOY_AND_CI.md` | GitHub Actions CI, environments, first deploy, remote migrations with backups, secrets, rollback, smoke tests, monitoring |
 | `BROWSER_EXTENSION.md` | `docs/BROWSER_EXTENSION.md` (only if the product has an extension) | Optional module: an MV3 extension that talks to the Worker |
+| `CLAUDE_PLUGINS.md` | `docs/CLAUDE_PLUGINS.md` | Community Claude plugins sorted by job (code, research, tokens, design, writing and video), one recommended pick per job, licences and what each runs on your computer |
+| `SEO_AND_DISCOVERABILITY.md` | `docs/SEO_AND_DISCOVERABILITY.md` | Getting a public site found: crawlability, Search Console and Bing, sitemap and robots.txt, meta titles and descriptions, SEO and GEO, Google Business Profile; used at launch, portable to any project |
+| `PRE_LAUNCH_COMPLIANCE_CHECKLIST.md` | `docs/PRE_LAUNCH_COMPLIANCE_CHECKLIST.md` | Legal, data, honest-design, accessibility and licence checks, used **only at the end of production** before release; portable to any project |
 | `agent-project-manager.md` | `.claude/agents/project-manager.md` | Plans, keeps GUIDE and ROADMAP current, branches and PR text |
 | `agent-credits-optimizer.md` | `.claude/agents/credits-optimizer.md` | Plans each task for full quality without waste; audits waste afterwards |
 | `agent-product-designer.md` | `.claude/agents/product-designer.md` | Brief, flow, scope, screens; WCAG 2.2 AA; owns `DESIGN_SYSTEM.md` |
 | `agent-developer.md` | `.claude/agents/developer.md` | Builds the front end in `src/` |
 | `agent-backend-developer.md` | `.claude/agents/backend-developer.md` | Builds the Worker API, data, files, sign-in, AI calls |
+| `agent-skills-scout.md` | `.claude/agents/skills-scout.md` | Runs on Haiku: reads large skills and references and returns only the rules a task needs; shows the credit warning |
 | `agent-ux-reviewer.md` | `.claude/agents/ux-reviewer.md` | Audits screens against the UI principles, UX laws and §23 checklist (read-only) |
 | `agent-code-reviewer.md` | `.claude/agents/code-reviewer.md` | Reviews diffs before every commit (read-only) |
 | `agent-qa-tester.md` | `.claude/agents/qa-tester.md` | Tests in the browser: widths, themes, keyboard, axe; text checks first, JPEG only |
@@ -52,7 +57,7 @@ Shell version of step 0 (from the folder with the pasted files):
 
 ```bash
 mkdir -p docs .claude/agents
-mv GUIDE.md ROADMAP.md DESIGN_SYSTEM.md WORKFLOW.md RESEARCH.md BACKEND_CLOUDFLARE.md ENV_AND_SECRETS.md SECURITY.md AI_FEATURES.md TESTING.md DEPLOY_AND_CI.md docs/
+mv GUIDE.md ROADMAP.md DESIGN_SYSTEM.md DESIGN_INSPIRATION.md WORKFLOW.md RESEARCH.md BACKEND_CLOUDFLARE.md ENV_AND_SECRETS.md SECURITY.md AI_FEATURES.md TESTING.md DEPLOY_AND_CI.md PRE_LAUNCH_COMPLIANCE_CHECKLIST.md SEO_AND_DISCOVERABILITY.md CLAUDE_PLUGINS.md docs/
 [ -f BROWSER_EXTENSION.md ] && mv BROWSER_EXTENSION.md docs/
 for f in agent-*.md; do mv "$f" ".claude/agents/${f#agent-}"; done
 ```
@@ -81,6 +86,10 @@ Replace these after setup (find what's left with `grep -rnE "\{\{[A-Z0-9_]+\}\}"
 | `{{DATE}}`, `{{GOAL_1}}`, `{{FEATURE}}`, `{{TACTIC_1}}`, `{{JOURNEY_NAME}}` and the rest | `docs/GUIDE.md`, `docs/ROADMAP.md`, `docs/RESEARCH.md` | The product, goals, features, journeys and plan (the templates explain each) |
 
 The branch prefix `dksk/` is the maintainer's initials. Another maintainer can swap it in every file with one search and replace (`dksk/` → `<initials>/`) before setup.
+
+## Finding the right doc, agent or skill
+
+After setup, `CLAUDE.md` has a **"Where to look for each objective"** table: for each kind of work (plan, research, design, expressive pages, front end, API, AI, QA, deploy, credits, diagrams and video, SEO, compliance) it names the docs to read, the agents to use, and any skills, plugins or libraries, with the cheapest-first order for finding a skill.
 
 ## Conventions these files carry
 
