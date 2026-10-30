@@ -2,7 +2,7 @@
 
 > **This is a recipe for Claude Code to execute.** When asked to "set up the project from SETUP.md", work through the steps below in order, in the project's root folder. Write every file exactly as given (code blocks are complete file contents unless a step says otherwise), then run the verify step. Don't commit, push or deploy; the owner does that. If a command prompts or fails, stop and report rather than improvising a different stack.
 
-**Result:** a running skeleton. Vite + React 19 + TypeScript, Tailwind CSS v4, shadcn/ui (`base-nova` style, built on Base UI, every component added), a Hono API on Cloudflare Workers (`/api/health` with a test), an app shell with sidebar, phone menu, theme menu, page/list/state building blocks, toasts, a GET cache and a tiny router. Two example pages (Overview, States) show the building blocks; replace them once real pages exist.
+**Result:** a running skeleton. Vite + React 19 + TypeScript, Tailwind CSS v4, shadcn/ui (`base-nova` style, built on Base UI, every component added), a Hono API on Cloudflare Workers (`/api/health` with a test), an app shell with sidebar, phone menu, theme menu, page/list/state building blocks, toasts, a GET cache and a tiny router. Three example pages: Welcome says what the starter set up, Overview and States show the building blocks; replace them once real pages exist.
 
 **Before you start**
 - Node 22 or newer and pnpm 10 or newer (`node -v`, `pnpm -v`).
@@ -24,7 +24,7 @@
 │   ├── components/ui/                  Every shadcn component (base-nova); a few customized in step 7
 │   ├── components/                     app-shell, page, states, form-field, form-select, copy-button,
 │   │                                   live-region, theme-provider, chunk-boundary
-│   ├── features/                       overview/, states/, items/ (examples)
+│   ├── features/                       welcome/, overview/, states/, items/ (examples)
 │   ├── lib/                            api, resource, route, route-focus, nav, notify, motion, utils, app
 │   └── hooks/use-mobile.ts             Added by shadcn (sidebar)
 ├── worker/                             Hono API (index.ts, http.ts, env.d.ts, test/health.test.ts)
@@ -1715,13 +1715,15 @@ import { APP_NAME, STORAGE_PREFIX } from "@/lib/app"
 // parseRoute for /section/:id), a page in App.tsx and, for a section, NAV.
 
 export type Route =
+  | { name: "welcome" }
   | { name: "overview" }
   | { name: "states" }
   | { name: "item"; id: string }
   | { name: "not-found" }
 
 const STATIC: Record<string, Route> = {
-  "/": { name: "overview" },
+  "/": { name: "welcome" },
+  "/overview": { name: "overview" },
   "/states": { name: "states" },
 }
 
@@ -1926,7 +1928,7 @@ function announcePage() {
 #### `src/lib/nav.ts`
 
 ```ts
-import { LayoutGrid, Shapes, type LucideIcon } from "lucide-react"
+import { LayoutGrid, Shapes, Sparkles, type LucideIcon } from "lucide-react"
 
 import type { Route } from "@/lib/route"
 
@@ -1942,10 +1944,17 @@ export type NavItem = {
 
 export const NAV: NavItem[] = [
   {
+    id: "welcome",
+    label: "Welcome",
+    icon: Sparkles,
+    path: "/",
+    routes: ["welcome"],
+  },
+  {
     id: "overview",
     label: "Overview",
     icon: LayoutGrid,
-    path: "/",
+    path: "/overview",
     routes: ["overview", "item"],
   },
   {
@@ -2917,7 +2926,7 @@ export function NoAccessPage({ title }: { title: string }) {
 export function NotFoundPage({
   title = "Page not found",
   description = "The link may be old or mistyped.",
-  back = { label: "Go to overview", href: "/" },
+  back = { label: "Go to the start page", href: "/" },
 }: {
   title?: string
   description?: string
@@ -3529,7 +3538,115 @@ export function CopyButton({
 
 ## Step 10. Example pages and the entry
 
-The Overview page reads `/api/health` through `useResource`; the States page shows the empty, loading, error and toast states. Replace both once real pages exist (keep the pattern).
+The Welcome page (`/`) says what the starter set up and what to do next; the Overview page (`/overview`) reads `/api/health` through `useResource`; the States page shows the empty, loading, error and toast states. Replace them once real pages exist (keep the pattern). To remove Welcome, delete `src/features/welcome/`, its route and `NAV` entry, and map `/` to the Overview page.
+
+#### `src/features/welcome/welcome-page.tsx`
+
+```tsx
+import {
+  Bot,
+  Code,
+  FileText,
+  Palette,
+  Server,
+  type LucideIcon,
+} from "lucide-react"
+
+import { Page, SectionLabel } from "@/components/page"
+import { APP_NAME } from "@/lib/app"
+import { onLinkClick } from "@/lib/route"
+
+// The first screen after setup: what the project starter gave this app and
+// what to do next. An example page; remove it once real pages exist.
+type Feature = { icon: LucideIcon; title: string; description: string }
+
+const FEATURES: Feature[] = [
+  {
+    icon: Code,
+    title: "Front end",
+    description:
+      "Vite, React 19 and TypeScript, styled with Tailwind CSS v4 and every shadcn/ui component, built on Base UI.",
+  },
+  {
+    icon: Server,
+    title: "API",
+    description:
+      "A Hono API on Cloudflare Workers with a tested /api/health. D1, R2, KV, Durable Objects and Claude are ready to turn on.",
+  },
+  {
+    icon: Palette,
+    title: "Design system",
+    description:
+      "Light and dark theme tokens, UI principles, UX laws and a review checklist in docs/DESIGN_SYSTEM.md.",
+  },
+  {
+    icon: FileText,
+    title: "Docs",
+    description:
+      "Product guide, roadmap, security, testing, deploy and launch guides in docs/, each with one job.",
+  },
+  {
+    icon: Bot,
+    title: "Agent team",
+    description:
+      "Ten Claude Code agents in .claude/agents/ that plan, design, build, review, test and deploy by the same rules.",
+  },
+]
+
+const NEXT_STEPS = [
+  "Fill in the placeholders with the owner (task M0-1 in docs/ROADMAP.md).",
+  "Delete 00-START-HERE.md, SETUP.md and GITHUB_TEMPLATES.md from the repo.",
+  "Describe the product in docs/GUIDE.md, then plan the first milestone with the project-manager agent.",
+  "Replace the example pages (this one, Overview and States) with real ones.",
+]
+
+const LINK =
+  "rounded-sm text-primary-ink underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+
+export function WelcomePage() {
+  return (
+    <Page title="Welcome" width="narrow">
+      <p className="text-reading text-foreground">
+        {APP_NAME} was set up from the project starter: a production-ready
+        base for a web app, with the docs and a team of Claude Code agents
+        that already know its conventions.
+      </p>
+
+      <SectionLabel>What the starter set up</SectionLabel>
+      <ul className="grid gap-3 sm:grid-cols-2">
+        {FEATURES.map(({ icon: Icon, title, description }) => (
+          <li key={title} className="rounded-xl border bg-card p-4 shadow-card">
+            <Icon aria-hidden="true" className="size-4 text-primary-ink" />
+            <h3 className="mt-2 text-sm font-medium">{title}</h3>
+            <p className="mt-1 text-meta text-muted-foreground">
+              {description}
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <SectionLabel>Next steps</SectionLabel>
+      <ol className="flex list-decimal flex-col gap-1.5 pl-5 text-sm marker:text-muted-foreground">
+        {NEXT_STEPS.map((step) => (
+          <li key={step}>{step}</li>
+        ))}
+      </ol>
+
+      <p className="mt-6 text-sm text-muted-foreground">
+        The building blocks are on the{" "}
+        <a href="/overview" onClick={onLinkClick} className={LINK}>
+          Overview
+        </a>{" "}
+        and{" "}
+        <a href="/states" onClick={onLinkClick} className={LINK}>
+          States
+        </a>{" "}
+        pages.
+      </p>
+    </Page>
+  )
+}
+```
 
 #### `src/features/items/items.ts`
 
@@ -3608,7 +3725,7 @@ export function ItemPage({ id }: { id: string }) {
       <NotFoundPage
         title="Item not found"
         description="It may have been deleted, or the link is old."
-        back={{ label: "Back to overview", href: "/" }}
+        back={{ label: "Back to overview", href: "/overview" }}
       />
     )
   return (
@@ -3800,6 +3917,7 @@ import { NotFoundPage } from "@/components/states"
 import { ItemPage } from "@/features/items/item-page"
 import { OverviewPage } from "@/features/overview/overview-page"
 import { StatesPage } from "@/features/states/states-page"
+import { WelcomePage } from "@/features/welcome/welcome-page"
 import { usePath, useRoute, type Route } from "@/lib/route"
 
 // Pages are chosen by path (src/lib/route.ts). Large pages can load on
@@ -3807,6 +3925,8 @@ import { usePath, useRoute, type Route } from "@/lib/route"
 // chunk after a deploy.
 function page(route: Route) {
   switch (route.name) {
+    case "welcome":
+      return <WelcomePage />
     case "overview":
       return <OverviewPage />
     case "states":
@@ -3923,7 +4043,7 @@ pnpm test
 pnpm build
 ```
 
-Then a quick run: `pnpm dev`, open http://localhost:5173 and check that the Overview page renders with "API is up", `/states` renders, an unknown path shows "Page not found", the theme menu switches light and dark, and the console has no errors. `curl -s http://localhost:5173/api/health` answers `{"ok":true,...}`. Stop the dev server afterwards.
+Then a quick run: `pnpm dev`, open http://localhost:5173 and check that the Welcome page renders, `/overview` renders with "API is up", `/states` renders, an unknown path shows "Page not found", the theme menu switches light and dark, and the console has no errors. `curl -s http://localhost:5173/api/health` answers `{"ok":true,...}`. Stop the dev server afterwards.
 
 Finally list the placeholders left for the owner: `grep -rnE "\{\{[A-Z0-9_]+\}\}" --exclude-dir=node_modules .`
 

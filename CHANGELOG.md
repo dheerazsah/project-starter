@@ -2,6 +2,14 @@
 
 All notable changes to the starter. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/) (major: a file moves, is renamed or changes its contract with SETUP.md; minor: new files or sections; patch: fixes and wording).
 
+## [2.1.0] - 2026-10-30
+
+### Added
+- `SETUP.md` step 10: a Welcome page at `/` (`src/features/welcome/welcome-page.tsx`, first in `NAV`) that says what the starter set up (front end, API, design system, docs, agent team) and lists the next steps after setup.
+
+### Changed
+- The Overview page moved from `/` to `/overview`; the item page's back link, the not-found page's default link ("Go to the start page"), the verify step and the sections line in `CLAUDE.md` follow.
+
 ## [2.0.0] - 2026-10-30
 
 ### Changed
