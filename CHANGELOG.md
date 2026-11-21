@@ -2,6 +2,15 @@
 
 All notable changes to the starter. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/) (major: a file moves, is renamed or changes its contract with SETUP.md; minor: new files or sections; patch: fixes and wording).
 
+## [2.3.0] - 2026-11-21
+
+### Added
+- `docs/GRAPHIFY.md`: the Graphify code map, set up for credits. Measured costs on the app `SETUP.md` builds (`path` about 50 tokens, `explain` about 130, `query` up to 2,000, the `/graphify` skill about 13,000, against about 3,300 to open the files for one question), when to use the map and when `grep` or a known file is cheaper, what `graphify claude install --project` writes (skill, `CLAUDE.md` section, `.claude/CLAUDE.md`, `PreToolUse` and `SessionStart` hooks), install commands with the owner's OK, a code-only build with `graphify update .`, keeping the map current, and removal.
+- `CLAUDE.md`: the doc in the docs table, Graphify in the "Understand a large codebase" and "Save credits" rows, and a "Cheapest lookup first" working rule. `WORKFLOW.md` §8 and `credits-optimizer` follow (briefs name things to `explain`; the audit counts lookup waste).
+
+### Changed
+- `CLAUDE_PLUGINS.md`: the Graphify row says what it installs and runs, and Graphify is the recommended pick for agents in §2 and part of the §3 advice. Listed in `README.md`, `00-START-HERE.md` and `SETUP.md` ("Before you start").
+
 ## [2.2.0] - 2026-10-30
 
 ### Removed

@@ -113,6 +113,7 @@ Before stopping work, leave the roadmap current: what's done, what's half done (
 - Waste to cut: rework from unclear briefs, re-reading whole trees, repeated full test runs (focused while working, full once at the end), oversized briefs, parallel edits that collide, screenshots.
 - **Never PNG.** Text checks first (DOM text, roles, computed styles, overflow, axe, console). Screenshots only when text can't tell or the owner needs to see it (PR screenshots), as JPEG quality 60 with CSS scale, a few per task.
 - No demo artifacts or long reports unless the owner asks.
+- **Cheapest lookup first.** If Graphify is installed (`graphify-out/` exists), a known name goes to `graphify explain` and a connection to `graphify path` (tens of tokens) before anyone opens files; `graphify query` (up to 2k tokens) only when nobody knows where to look; exact text still goes to `grep`. Never load the `/graphify` skill for lookups (13k tokens). Briefs can give the names to `explain` instead of a long file list ([`GRAPHIFY.md`](./GRAPHIFY.md) §2).
 
 ### External agent skills (Vercel agent-skills)
 
