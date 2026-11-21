@@ -2,7 +2,7 @@
 
 A shortlist of popular community Claude Code plugins and skills, sorted by the job they do, with **one recommended pick per job** for projects built on this starter. When the owner starts work in one of these directions, the agent points to that pick (see "How agents use this file") instead of installing anything.
 
-Checked on 29 October 2026. These projects change fast: reopen the repo before installing, because licences, hooks and install steps move.
+Checked on 29 October 2026; RTK, Ponytail and the Rive MCP on 21 November 2026. These projects change fast: reopen the repo before installing, because licences, hooks and install steps move.
 
 ## Rules before installing anything
 
@@ -35,11 +35,11 @@ Checked on 29 October 2026. These projects change fast: reopen the repo before i
 | [obra/superpowers](https://github.com/obra/superpowers) | Brainstorm → plan → test-driven build workflow | MIT | Skills + a SessionStart hook | Overlaps with `WORKFLOW.md`'s process |
 | [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) (ECC) | A full "agent harness": agents, commands, rules | MIT | **27 hooks** across 8 events, install script | Heavy; competes with our agents and rules |
 | [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) | A short CLAUDE.md of Karpathy-inspired rules (think first, keep it simple, surgical changes) | No licence file found | Skills only | Small and aligned, but read it and copy ideas rather than the text |
-| [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Makes the agent write less, simpler code | MIT | Plugin (skills, package scripts) | Fits our "no bloat" rules |
+| [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Makes the agent write less, simpler code | MIT | Plugin with Node hooks on `SessionStart`, `SubagentStart` and every prompt (keeps its mode on); writes a cost row per task to `~/.config/ponytail/band/` (turn off with its `ledger` setting); an optional webhook, empty by default | Fits our "no bloat" rules; it keeps tests, security and accessibility, and our rules win where it differs |
 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) / [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | Engineering workflow skills / Vercel's React and UI rules | MIT | Skills only | Vercel's: see `WORKFLOW.md` §8 (heavy, read through `skills-scout`) |
 | [millionco/react-doctor](https://github.com/millionco/react-doctor) | Scans React code for the bad patterns an AI agent may write (state and effects, performance, security, accessibility, maintainability) and reports a health score | MIT | CLI through `npx`; optional agent skill and CI workflow installs; sends anonymous usage and crash data to Sentry unless `--no-telemetry` | Good as a read-only check next to `code-reviewer`; details and rules in `TESTING.md` §4 |
 
-**Recommended: `mattpocock/skills`**, installing only the one or two skills you need. Lightest alternative: read the Karpathy guidelines and add any rule you like to `CLAUDE.md`. Avoid ECC and full Superpowers in starter projects: their hooks and process fight our workflow. To check React code that's already written, add **React Doctor** (see the table): a read-only scan, not a process.
+**Recommended: `mattpocock/skills`**, installing only the one or two skills you need. Lightest alternative: read the Karpathy guidelines and add any rule you like to `CLAUDE.md`. Avoid ECC and full Superpowers in starter projects: their hooks and process fight our workflow. If the agent keeps over-building (extra abstractions, libraries for one-liners), add **Ponytail**. To check React code that's already written, add **React Doctor** (see the table): a read-only scan, not a process.
 
 ### 2. Research and understanding something big
 
@@ -59,13 +59,14 @@ Checked on 29 October 2026. These projects change fast: reopen the repo before i
 | Plugin | What it is | Licence | Runs | Fit with this starter |
 | --- | --- | --- | --- | --- |
 | [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman) | Makes the agent talk and read tersely to save tokens | Apache-2.0 | Plugin + install script; changes every session once installed | Saves tokens on agent chatter; turn it off for docs, PR text and anything the owner reads |
+| [rtk-ai/rtk](https://github.com/rtk-ai/rtk) | Shrinks command output (git, tests, builds, logs, `ls`) before the agent reads it, up to 90% | Apache-2.0 | CLI (`brew install rtk`); `rtk init -g` adds a `PreToolUse` hook on Bash to `~/.claude/settings.json` (every project). Asks about telemetry at setup (command names and savings, no code; answer N or `rtk telemetry disable`) | Good: local, under 25 ms a command, nothing to learn. It can hide lines from an agent; `rtk recall <id>` shows them. `rtk gain` measures the saving |
 | [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) | Remembers past sessions by compressing transcripts into a searchable memory | Apache-2.0 | Hooks + a background worker + local database | Useful on long projects; stores everything you and the agent typed, including secrets you paste |
 | [headroomlabs-ai/headroom](https://github.com/headroomlabs-ai/headroom) | Compresses context before it reaches the model | Apache-2.0 | Python; **`headroom wrap claude` routes your traffic through a local proxy**, installs Serena, can edit `CLAUDE.md` | Powerful but invasive; only with the owner's explicit OK |
 | [garrytan/gstack](https://github.com/garrytan/gstack) | Garry Tan's "virtual engineering team" of slash commands (CEO, eng manager, QA, security, release) | MIT | Installs to `~/.claude/skills`, builds a browser, registers hooks; its install tells the agent to edit `CLAUDE.md` and stop using Claude in Chrome | Competes with our agent team and owner approvals |
 | [open-gsd/gsd-core](https://github.com/open-gsd/gsd-core) (GSD, formerly `gsd-build/get-shit-done`) | Spec-driven development framework | MIT | Plugin with hooks, commands and agents | Competes with `WORKFLOW.md` and `ROADMAP.md` |
 | [bmad-code-org/BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) | Agile multi-agent method (analyst, PM, architect, dev, QA) | MIT | Installer, agents, workflows | Competes with our team and process |
 
-**Recommended: no plugin first.** Use the starter's own tools: `credits-optimizer` plans, `skills-scout` (Haiku) reads big references, focused tests, no screenshots, and once the codebase has grown, the Graphify code map ([`GRAPHIFY.md`](./GRAPHIFY.md)) so agents stop opening file after file. If tokens still run out, try **`caveman`** for agent-to-agent chatter only. Use `claude-mem` only on long solo projects where the history holds no secrets. GStack, GSD and BMAD are whole processes: use them instead of this starter's process, not on top of it.
+**Recommended: no plugin first.** Use the starter's own tools: `credits-optimizer` plans, `skills-scout` (Haiku) reads big references, focused tests, no screenshots, and once the codebase has grown, the Graphify code map ([`GRAPHIFY.md`](./GRAPHIFY.md)) so agents stop opening file after file. If tokens still run out, add **`rtk`** first (it shrinks what commands print and changes nothing else), then try **`caveman`** for agent-to-agent chatter only. Use `claude-mem` only on long solo projects where the history holds no secrets. GStack, GSD and BMAD are whole processes: use them instead of this starter's process, not on top of it.
 
 ### 4. Design and visuals
 
@@ -74,11 +75,12 @@ Checked on 29 October 2026. These projects change fast: reopen the repo before i
 | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | Design commands that critique and polish UI and remove generic "AI look" | Apache-2.0 | Plugin (skills, package scripts) | Good: complements `ux-reviewer` and `DESIGN_SYSTEM.md` |
 | [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill) | Art direction for distinctive, non-generic frontends | MIT | Skills + install script | Good for public pages; this account may already have it as `design-taste-frontend` |
 | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | A large searchable database of UI styles, palettes, fonts and rules | MIT | Skill + Python search scripts | Useful for exploring styles; our tokens and rules still win |
+| [Rive MCP](https://rive.app/docs) | Lets Claude drive the Rive Editor: artboards, shapes, bones, state machines, view models and data binding | Rive Editor is a commercial desktop app | A local MCP server inside the Rive desktop app (macOS, Windows), on only while it's open: `claude mcp add --transport http rive http://127.0.0.1:9791/mcp` | Good for interactive animations on public pages (`DESIGN_INSPIRATION.md`); playing `.riv` files in the app needs Rive's web runtime, a new dependency (owner OK) |
 | [tt-a1i/archify](https://github.com/tt-a1i/archify) | Reads code and generates architecture diagrams | Apache-2.0 | Skill + Node scripts | Good for `GUIDE.md` architecture |
 | [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) | 27 editorial-style diagram types as HTML/SVG, can match a site's brand | MIT | Skill (+ Playwright for PNG export) | Good for docs and decks |
 | [hugohe3/ppt-master](https://github.com/hugohe3/ppt-master) | Generates native, editable PowerPoint from documents | MIT | Python pipeline | Works; ignore the README's sponsored "API relay" services (unofficial resellers of model access) |
 
-**Recommended: `impeccable`** for UI quality; **`diagram-design`** for diagrams. For decks, Claude's built-in Slides artifact or the pptx skill usually does the job without a plugin.
+**Recommended: `impeccable`** for UI quality; **`diagram-design`** for diagrams; the **Rive MCP** when the owner wants interactive animations built in Rive. For decks, Claude's built-in Slides artifact or the pptx skill usually does the job without a plugin.
 
 ### 5. Writing, marketing and video
 
