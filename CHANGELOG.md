@@ -2,6 +2,15 @@
 
 All notable changes to the starter. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/) (major: a file moves, is renamed or changes its contract with SETUP.md; minor: new files or sections; patch: fixes and wording).
 
+## [2.4.0] - 2026-11-21
+
+### Added
+- `CLAUDE_PLUGINS.md`: RTK in §3 (shrinks command output; global `PreToolUse` hook, the telemetry question at setup, `rtk recall` for hidden lines) as the first plugin to try when tokens run out, before Caveman; the Rive MCP in §4 (drives the Rive Editor through a local server while the app is open) for interactive animations.
+- `CLAUDE.md`: RTK in the "Save credits" row, Rive in the "expressive or premium" row.
+
+### Changed
+- `CLAUDE_PLUGINS.md`: the Ponytail row says what it runs (Node hooks on session start, subagent start and every prompt; a per-task cost log in `~/.config/ponytail/`), and §1 suggests it when the agent over-builds.
+
 ## [2.3.0] - 2026-11-21
 
 ### Added
