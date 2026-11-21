@@ -55,6 +55,7 @@ Every file in `template/` sits at the path it keeps in the new project.
 | [`docs/TESTING.md`](./template/docs/TESTING.md) | Worker tests on in-memory D1, migration tests, browser QA, axe |
 | [`docs/DEPLOY_AND_CI.md`](./template/docs/DEPLOY_AND_CI.md) | CI, environments, first deploy, backups, rollback, monitoring |
 | [`docs/BROWSER_EXTENSION.md`](./template/docs/BROWSER_EXTENSION.md) | Optional: an MV3 extension that talks to the Worker |
+| [`docs/GRAPHIFY.md`](./template/docs/GRAPHIFY.md) | The [Graphify](https://github.com/Graphify-Labs/graphify) code map agents check before opening files: install (owner OK), query commands, keeping it current |
 | [`docs/CLAUDE_PLUGINS.md`](./template/docs/CLAUDE_PLUGINS.md) | Which community Claude plugin to install for each kind of work, one pick per job, with licences and what each runs |
 | [`docs/SEO_AND_DISCOVERABILITY.md`](./template/docs/SEO_AND_DISCOVERABILITY.md) | Launch guide for being found on Google, Bing and AI answer engines (Search Console, sitemap, meta tags, SEO and GEO, Google Business Profile), with the Worker setup for public pages |
 | [`docs/PRE_LAUNCH_COMPLIANCE_CHECKLIST.md`](./template/docs/PRE_LAUNCH_COMPLIANCE_CHECKLIST.md) | Pre-release compliance gate (privacy, terms, cookies, consents, deletion, dark patterns, accessibility, licences); used only at the end of production, portable to any project |

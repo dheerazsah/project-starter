@@ -46,13 +46,13 @@ Checked on 29 October 2026. These projects change fast: reopen the repo before i
 | Plugin | What it is | Licence | Runs | Fit with this starter |
 | --- | --- | --- | --- | --- |
 | [Egonex-AI/Understand-Anything](https://github.com/Egonex-AI/Understand-Anything) (formerly `Lum1104`) | Turns a codebase or docs into an interactive knowledge graph you can explore and ask about | MIT | Plugin + install script, Node | Good for inheriting a big codebase |
-| [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Builds a knowledge graph of a codebase for the agent to query | Apache-2.0 | Python CLI (`uv tool install graphifyy`) that registers a skill | Good; costs tokens to build the graph |
+| [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Builds a knowledge graph of the code that the agent queries before opening files | Apache-2.0 (parts MIT) | Python CLI (`uv tool install graphifyy`); `graphify claude install --project` adds a skill, a `CLAUDE.md` section and **`PreToolUse` hooks** on Bash, Grep, Read and Glob (reminders, not blocks); code is mapped locally with no LLM | **Built in:** set up as in [`GRAPHIFY.md`](./GRAPHIFY.md); fewer files opened per question as the code grows |
 | [mvanhorn/last30days-skill](https://github.com/mvanhorn/last30days-skill) | Researches what people said about a topic in the last 30 days (Reddit, X, web) | MIT | Plugin + Python; needs API keys for some sources | Good for market and competitor research (`RESEARCH.md`) |
 | [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) | Gives agents access to Twitter/X, Xiaohongshu and other sites | MIT | Python; **logs in with your accounts and cookies** | Risky: account bans and site terms; the PyPI package of the same name is **not** this project |
 | [santifer/career-ops](https://github.com/santifer/career-ops) | A job-search system: evaluates offers, tailors CVs | MIT | Plugin + a SessionStart hook that installs Node packages | Not for product work |
 | "REA" | Couldn't identify this one from the name; check the original list for the exact repo | | | |
 
-**Recommended: `Understand-Anything`** for understanding a large codebase; **`last30days-skill`** for market research. Avoid Agent Reach on work machines.
+**Recommended: `graphify`** for the agents (set up and rules in [`GRAPHIFY.md`](./GRAPHIFY.md)), and `Understand-Anything` when a person wants an interactive tour of a codebase they've inherited; **`last30days-skill`** for market research. Avoid Agent Reach on work machines.
 
 ### 3. Huge projects and running out of tokens
 
@@ -65,7 +65,7 @@ Checked on 29 October 2026. These projects change fast: reopen the repo before i
 | [open-gsd/gsd-core](https://github.com/open-gsd/gsd-core) (GSD, formerly `gsd-build/get-shit-done`) | Spec-driven development framework | MIT | Plugin with hooks, commands and agents | Competes with `WORKFLOW.md` and `ROADMAP.md` |
 | [bmad-code-org/BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) | Agile multi-agent method (analyst, PM, architect, dev, QA) | MIT | Installer, agents, workflows | Competes with our team and process |
 
-**Recommended: no plugin first.** Use the starter's own tools: `credits-optimizer` plans, `skills-scout` (Haiku) reads big references, focused tests, no screenshots. If tokens still run out, try **`caveman`** for agent-to-agent chatter only. Use `claude-mem` only on long solo projects where the history holds no secrets. GStack, GSD and BMAD are whole processes: use them instead of this starter's process, not on top of it.
+**Recommended: no plugin first.** Use the starter's own tools: `credits-optimizer` plans, `skills-scout` (Haiku) reads big references, focused tests, no screenshots, and once the codebase has grown, the Graphify code map ([`GRAPHIFY.md`](./GRAPHIFY.md)) so agents stop opening file after file. If tokens still run out, try **`caveman`** for agent-to-agent chatter only. Use `claude-mem` only on long solo projects where the history holds no secrets. GStack, GSD and BMAD are whole processes: use them instead of this starter's process, not on top of it.
 
 ### 4. Design and visuals
 

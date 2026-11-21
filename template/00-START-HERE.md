@@ -35,6 +35,7 @@ A set of Markdown files that turns an empty folder into a production-ready proje
 | `docs/TESTING.md` | The Worker test harness (in-memory D1), what to test, migration tests, Playwright text-first QA, axe |
 | `docs/DEPLOY_AND_CI.md` | GitHub Actions CI, environments, first deploy, remote migrations with backups, secrets, rollback, smoke tests, monitoring |
 | `docs/BROWSER_EXTENSION.md` | Optional module: an MV3 extension that talks to the Worker (delete it if the product has no extension) |
+| `docs/GRAPHIFY.md` | The Graphify code map: agents query it before opening files, which saves tokens as the code grows; what it installs, install commands (owner OK), query commands, keeping it current |
 | `docs/CLAUDE_PLUGINS.md` | Community Claude plugins sorted by job (code, research, tokens, design, writing and video), one recommended pick per job, licences and what each runs on your computer |
 | `docs/SEO_AND_DISCOVERABILITY.md` | Getting a public site found: crawlability, Search Console and Bing, sitemap and robots.txt, meta titles and descriptions, SEO and GEO, Google Business Profile; used at launch, portable to any project |
 | `docs/PRE_LAUNCH_COMPLIANCE_CHECKLIST.md` | Legal, data, honest-design, accessibility and licence checks, used **only at the end of production** before release; portable to any project |

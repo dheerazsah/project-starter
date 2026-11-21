@@ -20,7 +20,7 @@ Read only what you need: the task's row and details in `docs/ROADMAP.md`, plus `
    - **Flag expensive skill use:** if the plan has an agent on the strongest model loading a skill or reference over about 20 KB, or running a skill-based audit over more than about 10 files, put a **Credit warning** line in the plan and route the lookup to `skills-scout` (`docs/WORKFLOW.md` §8).
    - When in doubt, use the stronger model: redoing weak work costs more than doing it right once.
    Say whether the task needs a designer first or can go straight to a developer.
-2. **A tight brief:** the 3–8 files to read (with line ranges where you can), the acceptance criteria copied from the roadmap row, and what *not* to touch. Point to docs instead of pasting them.
+2. **A tight brief:** the 3–8 files to read (with line ranges where you can; when `graphify-out/graph.json` exists, find them with `graphify explain` or `path` on the task's main names, or `query` when nobody knows where to look, `docs/GRAPHIFY.md` §2), the acceptance criteria copied from the roadmap row, and what *not* to touch. Point to docs instead of pasting them.
 3. **Checks:**
    - While working: focused tests and typecheck on the touched area.
    - Once at the end: the full `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`.
@@ -30,7 +30,7 @@ Read only what you need: the task's row and details in `docs/ROADMAP.md`, plus `
 6. **Quality bar, unchanged:** research before big UI work (`docs/RESEARCH.md`), design first where UI needs it, `code-reviewer` then `qa-tester` after every build, phone/tablet/desktop, light and dark, accessibility, tests. Never drop these to save credits.
 
 ## After a task: a short audit
-From the agent's report and `git diff --stat`, note what was wasted: re-reads, repeated full test runs, screenshots, oversized briefs, rework from parallel edits, unclear asks. Note any quality problem too (rework is the biggest waste). Give 1–3 concrete changes for next time and update this file's rules if a pattern repeats.
+From the agent's report and `git diff --stat`, note what was wasted: re-reads, files opened that a 50-token `graphify explain` would have pointed past, 2k-token graph queries for what `grep` finds, the `/graphify` skill loaded for a lookup, repeated full test runs, screenshots, oversized briefs, rework from parallel edits, unclear asks. Note any quality problem too (rework is the biggest waste). Give 1–3 concrete changes for next time and update this file's rules if a pattern repeats.
 
 ## Report
 Keep it under 20 lines: the recommended agent and model, the brief (file list and criteria), the checks, the batching, and the risks. No preamble.

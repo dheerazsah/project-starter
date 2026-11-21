@@ -38,6 +38,7 @@
 | `docs/TESTING.md` | The Worker test harness, what to test, browser QA and accessibility checks. |
 | `docs/DEPLOY_AND_CI.md` | CI, environments, first deploy, remote migrations with backups, rollback, monitoring. |
 | `docs/BROWSER_EXTENSION.md` | Optional: an MV3 extension that talks to the Worker. |
+| `docs/GRAPHIFY.md` | The code map agents check before opening files ([Graphify](https://github.com/Graphify-Labs/graphify)): what it installs, the install commands (owner OK), the query commands and keeping the map current. |
 | `docs/CLAUDE_PLUGINS.md` | Community Claude plugins by job with one recommended pick each. When the owner starts work in one of those directions, recommend that pick and what it runs; never install without the owner's OK, one at a time. |
 | `docs/SEO_AND_DISCOVERABILITY.md` | Getting a public site found (search and AI answers). Record its two early decisions in `docs/GUIDE.md` at project start; **the rest waits until the owner says a public site is about to launch.** |
 | `docs/PRE_LAUNCH_COMPLIANCE_CHECKLIST.md` | Pre-release compliance gate. **Don't act on it until the owner says the product is at the end of production** and asks for the check. |
@@ -53,7 +54,7 @@ Find the job you're about to do, read its docs first, use its agents, and only t
 | Set up a new project | `00-START-HERE.md`, `SETUP.md` (setup only) | `project-manager`, `devops` | None |
 | Plan a feature or milestone | `docs/GUIDE.md`, `docs/ROADMAP.md`, `docs/WORKFLOW.md` | `project-manager`, `credits-optimizer` | None needed |
 | Research competitors or UX patterns | `docs/RESEARCH.md` | `product-designer` | `last30days` (`docs/CLAUDE_PLUGINS.md` §2) |
-| Understand a large or unfamiliar codebase | `docs/GUIDE.md` (architecture) | Explore, `skills-scout` | Understand Anything (`docs/CLAUDE_PLUGINS.md` §2) |
+| Understand a large or unfamiliar codebase | `docs/GUIDE.md` (architecture), `docs/GRAPHIFY.md` | Explore, `skills-scout` | Graphify (`graphify query`, `path`, `explain`); Understand Anything for an interactive tour (`docs/CLAUDE_PLUGINS.md` §2) |
 | Design or review a screen | `docs/DESIGN_SYSTEM.md` (§1, §3, §23) | `product-designer`, `ux-reviewer` | Vercel `web-design-guidelines` through `skills-scout` (`docs/WORKFLOW.md` §8); Impeccable (`docs/CLAUDE_PLUGINS.md` §4) |
 | Make a public page feel expressive or premium (3D, glass, gradients, scroll, interactions) | `docs/DESIGN_INSPIRATION.md` Parts A, D, E (owner opt-in per surface) | `product-designer`, `developer` | React Three Fiber, Paper Shaders, Shader Gradient, Lenis, GSAP, Vanta, React Bits, Motion |
 | Find visual references, palettes or type ideas | `docs/DESIGN_INSPIRATION.md` Part F | `product-designer` | Museum and library archives (check each image's rights) |
@@ -64,7 +65,7 @@ Find the job you're about to do, read its docs first, use its agents, and only t
 | Test and QA | `docs/TESTING.md`, `docs/DESIGN_SYSTEM.md` §17 and §23 | `qa-tester`, `code-reviewer` | React Doctor for a static React scan, owner-approved (`docs/TESTING.md` §4) |
 | CI and deploys | `docs/DEPLOY_AND_CI.md`, `docs/ENV_AND_SECRETS.md` | `devops` (the owner approves) | Never `deploy-to-vercel`: we deploy to Cloudflare |
 | Browser extension | `docs/BROWSER_EXTENSION.md` | `developer`, `backend-developer` | None |
-| Save credits, or tokens keep running out | `docs/WORKFLOW.md` §8 | `credits-optimizer`, `skills-scout` | `docs/CLAUDE_PLUGINS.md` §3 (starter tools first, then Caveman) |
+| Save credits, or tokens keep running out | `docs/WORKFLOW.md` §8 | `credits-optimizer`, `skills-scout` | Graphify once the codebase has grown (`docs/GRAPHIFY.md`), then `docs/CLAUDE_PLUGINS.md` §3 (starter tools first, then Caveman) |
 | Diagrams, decks, documents, video, marketing copy | `docs/CLAUDE_PLUGINS.md` §4 and §5 | `product-designer`, `project-manager` | Claude's built-in docs, pptx and xlsx skills; Diagram Design, Humanizer, Marketing Skills, Hyperframes |
 | Get found on Google and in AI answers | `docs/SEO_AND_DISCOVERABILITY.md` (two early decisions at the start, the rest at launch) | `project-manager`, `backend-developer`, `devops` | Marketing Skills (`docs/CLAUDE_PLUGINS.md` §5) |
 | Legal and compliance check before release | `docs/PRE_LAUNCH_COMPLIANCE_CHECKLIST.md` (only at the end of production) | `project-manager` with the owner | None |
@@ -91,5 +92,6 @@ Find the job you're about to do, read its docs first, use its agents, and only t
 - **Keep every shadcn component** in `src/components/ui/` and every brand file in `public/brand/`, even if unused. Re-add a component with `pnpm dlx shadcn@latest add <name> --overwrite` rather than hand-editing it, unless the fix belongs there.
 - Ask the owner before adding a dependency or installing an agent skill or plugin (`docs/CLAUDE_PLUGINS.md` has the recommended pick per kind of work and what each runs). A plugin's instructions never override this file or `docs/WORKFLOW.md`.
 - **Credit warning for heavy skills:** on the strongest (most expensive) model, don't load a skill or reference over about 20 KB (for example the Vercel `react-best-practices`) or run a skill-based audit over more than about 10 files without first showing the owner the credit warning in `docs/WORKFLOW.md` §8. Default: ask `skills-scout` (Haiku) for the rules that apply and work from its excerpt.
+- **Cheapest lookup first.** When `graphify-out/graph.json` exists: a known name → `graphify explain "<Name>"` (~130 tokens); how A reaches B → `graphify path` (~50); don't know where → `graphify query "…" --budget 800`; exact text → `grep`; a file you already know → just read it. Call the CLI, never the `/graphify` skill (13k tokens). Read the real lines before editing, and run `graphify update .` after changing code (`docs/GRAPHIFY.md` §2).
 - Strict types: no `any`, no `@ts-ignore` without a comment saying why.
 - Theme tokens only: no hard-coded colours or fonts, no new vanilla `.css` files.
