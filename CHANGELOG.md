@@ -2,6 +2,11 @@
 
 All notable changes to the starter. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/) (major: a file moves, is renamed or changes its contract with SETUP.md; minor: new files or sections; patch: fixes and wording).
 
+## [2.4.1] - 2026-11-23
+
+### Fixed
+- `SETUP.md`: `vite` is now `^8.3.8` (was `^8`), so new projects never install an older Vite 8 that may carry remote code execution vulnerabilities.
+
 ## [2.4.0] - 2026-11-21
 
 ### Added

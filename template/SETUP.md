@@ -136,7 +136,7 @@ Then write `package.json` exactly as below (the name is your slug; the version r
     "react-doctor": "^0.9.18",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8",
-    "vite": "^8",
+    "vite": "^8.3.8",
     "vitest": "^5.0.4",
     "wrangler": "^4.149.0"
   },
